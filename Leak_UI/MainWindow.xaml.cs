@@ -1,31 +1,15 @@
-﻿using System.Windows;
+﻿using System.IO.Ports;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Shell;
 
 namespace Leak_UI {
     /// <summary>
     /// MainWindow.xaml에 대한 상호 작용 논리
     /// </summary>
     public partial class MainWindow : Window {
-        
-
         public MainWindow() {
             InitializeComponent();
-            
-        }
-
-        #region ViewDesign
-        // Window Minimize
-        private void btnMinimize_Click(object sender, RoutedEventArgs e) {
-            WindowState = WindowState.Minimized;
-        }
-
-        // Window Size 
-        private void btnSize_Click(object sender, RoutedEventArgs e) {
-            WindowState = (WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
-        }
-
-        private void btnClose_Click(object sender, RoutedEventArgs e) {
-            Application.Current.Shutdown();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e) {
@@ -33,8 +17,16 @@ namespace Leak_UI {
                 DragMove();
             }
         }
+        private void Window_Loaded(object sender, RoutedEventArgs e) {
+            WindowChrome.SetWindowChrome(this, new WindowChrome {
+                ResizeBorderThickness = new Thickness(8),
+                CaptionHeight = 0
+            });
 
-        #endregion
-
+            Style roundedWindowStyle = FindResource("RoundedWindowStyle") as Style;
+            if (roundedWindowStyle != null) {
+                Style = roundedWindowStyle;
+            }
+        }
     }
 }

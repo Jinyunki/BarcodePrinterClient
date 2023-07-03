@@ -24,7 +24,5 @@ namespace Leak_UI.Utiles {
         public void Execute(object parameter) {
             ExecuteMethod(parameter);
         }
-
-
     }
 }
