@@ -15,6 +15,7 @@
 using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using Leak_UI.Model;
 using Leak_UI.Utiles;
 using System.Runtime.InteropServices;
 using System.Windows.Threading;
@@ -39,14 +40,12 @@ namespace Leak_UI.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
         }
 
-        public MainViewModel Main
-        {
-            get
-            {
+        public MainViewModel Main {
+            get {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

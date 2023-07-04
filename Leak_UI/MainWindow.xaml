@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Background="#2E333A"
-        xmlns:Utiles="clr-namespace:Leak_UI.Utiles"
+        xmlns:Model="clr-namespace:Leak_UI.Model"
         WindowStyle="None" MouseDown="Window_MouseDown" WindowState="{Binding WindowState}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         Height="600" Width="1200" Loaded="Window_Loaded" AllowsTransparency="True">
@@ -26,9 +26,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--BackColor-->
-        <Utiles:IndexToBackgroundConverter x:Key="IndexToBackgroundConverter" />
-        
         <!--Window btn style-->
         <Style TargetType="Button" x:Key="CommonButtonStyle">
             <Setter Property="FontFamily" Value="Montserret"/>
@@ -104,7 +101,7 @@
                                 SnapsToDevicePixels="True">
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsPressed"
+                            <Trigger Property="IsMouseOver"
                                      Value="True">
                                 <Setter Property="Background"
                                         TargetName="button"
@@ -210,7 +207,8 @@
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Grid.ColumnSpan="3" Background="White" Opacity="0.05"/>
@@ -231,7 +229,7 @@
                                    VerticalAlignment="Center" />
 
             <TextBlock Grid.Column="1" Grid.Row="3" Style="{StaticResource font_style}"
-                                   Text="PrintCount" FontSize="25" 
+                                   Text="ScanCount" FontSize="25" 
                                    VerticalAlignment="Center" />
 
             <TextBlock Grid.Column="1" Grid.Row="4" Style="{StaticResource font_style}"
@@ -250,18 +248,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" FontSize="20" Style="{StaticResource font_style}"
-                                   Text="{Binding ResultConnect}" VerticalAlignment="Center"/>
+                                   Text="{Binding Model.ResultConnect}" VerticalAlignment="Center"/>
 
                 <Button  x:Name="btn_PortConnect" Grid.Column="1" Margin="10"
                                      Style="{StaticResource Close_btn}"
-                                     Command="{Binding BtnPortConnectCommand}" >
+                                     Command="{Binding Model.BtnPortConnectCommand}" >
                     <Button.Background>
                         <ImageBrush ImageSource="Assets/closeBtn_default.png"/>
                     </Button.Background>
                 </Button>
 
             </Grid>
-            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tb_Model" Text="{Binding Product_ID}" 
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tb_Model" Text="{Binding Model.Product_ID}" 
                                      FontSize="20" MinWidth="150" Style="{StaticResource font_style}"
                                      VerticalAlignment="Center" HorizontalAlignment="Left" />
 
@@ -270,10 +268,10 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding BoxSize}"
+                <TextBlock Grid.Column="0" Text="{Binding Model.BoxSize}"
                                Style="{StaticResource font_style}" FontSize="20"/>
             </Grid>
-            <TextBlock Grid.Column="2" Grid.Row="3"  x:Name="tb_PrintCount" Text="{Binding PrintCount}" 
+            <TextBlock Grid.Column="2" Grid.Row="3"  x:Name="tb_PrintCount" Text="{Binding Model.ScanCount}" 
                                      FontSize="20" MinWidth="50" Style="{StaticResource font_style}"
                                      VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
@@ -283,47 +281,104 @@
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="{Binding LabelType}" VerticalAlignment="Center"
+                <TextBlock Grid.Column="0" Text="{Binding Model.LabelType}" VerticalAlignment="Center"
                                    FontSize="20" Style="{StaticResource font_style}"/>
 
 
             </Grid>
 
-            <TextBlock Grid.Column="2" Grid.Row="5" Text="{Binding PrintProgress}" 
+            <TextBlock Grid.Column="2" Grid.Row="5" Text="{Binding Model.PrintProgress}" 
                                    VerticalAlignment="Center" Style="{StaticResource font_style}"
                                    FontSize="20"/>
 
-            <TextBox Grid.Column="1" Grid.Row="6" Text="{Binding ScanCount}"/>
+            <TextBlock Grid.Column="1" Grid.Row="6" Text="잔량 출력" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Foreground="White" FontSize="20"/>
 
-            <Button  x:Name="Btn_Print" Grid.Column="2" Grid.Row="6"
+
+            <Grid Grid.Column="2" Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button  x:Name="Btn_Print"
                      Style="{StaticResource Print_btn}"
                      Margin="10" Padding="5"
-                     FontSize="20" Command="{Binding BtnPrintCommand}">
-                <Button.Background>
-                    <ImageBrush ImageSource="Assets/img_printer_white.png"/>
-                </Button.Background>
-            </Button>
+                     FontSize="20" Command="{Binding Model.BtnPrintCommand}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="Assets/img_printer_white.png"/>
+                    </Button.Background>
+                </Button>
+            </Grid>
+
+            <TextBlock Grid.Column="1" Grid.Row="7" Text="재 발행" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                           Foreground="White" FontSize="20"/>
+
+            <!--<TextBox Grid.Column="1" Grid.Row="7" Text="{Binding Model.PrintCount}"/>
+            -->
+            
 
         </Grid>
 
         <!--Box grid-->
-        <Grid Grid.Column="1" Grid.Row="1" Background="White" Margin="10">
-            <ItemsControl ItemsSource="{Binding GridData}">
+        <Grid Grid.Column="1" Grid.Row="1" Background="Black" Margin="17" Opacity="0.2">
+            <ItemsControl ItemsSource="{Binding GridData}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding NumberOfRows}" Columns="{Binding NumberOfColumns}"/>
+                        <UniformGrid Rows="{Binding Model.NumberOfRows}" Columns="{Binding Model.NumberOfColumns}"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <TextBlock Text="{Binding Index}" 
-                                       Background="{Binding Background}" 
-                                       FontSize="20"/>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="1">
+                            <Grid Background="{Binding Background}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="3*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="{Binding Index}"
+                                       FontSize="15"/>
+                                <!--GetItem에 모델 시리얼 넣어줘야함-->
+                                <TextBlock Grid.Row="1" Text="{Binding ModelSerial}" 
+                                       FontSize="15"/>
+                                <!--GetItem에 모델 매치Data 넣어줘야함-->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding MatchItem1}"
+                                       FontSize="15"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding MatchItem2}"
+                                       FontSize="15"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding MatchItem3}"
+                                       FontSize="15"/>
+                                </Grid>
+                                
+                            </Grid>
+                            
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+        </Grid>
+
+        <Grid Grid.Column="1" Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.RowSpan="2" Grid.Column="0" Width="7" Background="{Binding Model.BoxColor}" HorizontalAlignment="Left"/>
+            <Grid Grid.RowSpan="2" Grid.Column="1" Width="7" Background="{Binding Model.BoxColor}" HorizontalAlignment="Right"/>
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" Height="7" Background="{Binding Model.BoxColor}" VerticalAlignment="Top"/>
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="7" Background="{Binding Model.BoxColor}" VerticalAlignment="Bottom"/>
         </Grid>
     </Grid>
 </Window>

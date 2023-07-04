@@ -123,11 +123,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\GridItem.cs" />
+    <Compile Include="Model\MainModel.cs" />
     <Compile Include="Utiles\CircularProgressBar.cs" />
     <Compile Include="Utiles\ColorConverter.cs" />
     <Compile Include="Utiles\Command.cs" />
     <Compile Include="Utiles\IDispatcher.cs" />
-    <Compile Include="Utiles\IndexToBackgroundConverter.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\BoxView.xaml.cs">
@@ -193,9 +194,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Fonts\LICENSE.txt" />
   </ItemGroup>

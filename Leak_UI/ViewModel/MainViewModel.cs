@@ -14,73 +14,40 @@ using System.Collections.ObjectModel;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
-using System.Drawing;
-using System.ComponentModel;
-using System.Windows.Media;
 using Brushes = System.Windows.Media.Brushes;
-using Brush = System.Windows.Media.Brush;
+using Leak_UI.Model;
 
 namespace Leak_UI.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        public MainViewModel(IDispatcher dispatcher) {
-            this.dispatcher = dispatcher;
-            OpenSerialPort();
-            BtnEvent();
-            WinBtnEvent();
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            NumberOfColumns = 5; // 가로
-            NumberOfRows = 3; // 세로
+        /// <summary>
+        /// Model List Set
+        /// </summary>
+        private Model.MainModel model = null;
+        public Model.MainModel Model {
+            get { return model; }
+            set { model = value; RaisePropertyChanged("Model"); }
         }
-
-
-        #region Item List
-
-        private string webUri = "https://jc-label.mobis.co.kr/";
-        private string id = "SS1F";
-        private string ps = "Sekonix12@@";
-
-        private const string BOX_LABEL_HYUNDAI_LARGE = "//*[@id='MOTOR_LABEL']/ul/li[1]/div/a";
-        private const string BOX_LABEL_HYUNDAI_MIDDLE = "//*[@id='MOTOR_LABEL']/ul/li[2]/div/a";
-        private const string BOX_LABEL_HYUNDAI_SMALL = "//*[@id='MOTOR_LABEL']/ul/li[3]/div/a";
-        private const string BOX_LABEL_KIA_LARGE = "//*[@id='MOTOR_LABEL']/ul/li[4]/div/a";
-        private const string BOX_LABEL_KIA_MIDDLE = "//*[@id='MOTOR_LABEL']/ul/li[5]/div/a";
-
-        private const string MODEL_PRODUCT_ID = "ContentPlaceHolder1_txtProductID";
-        private const string PACKAGED_QUANTITY = "ContentPlaceHolder1_txtPackQty";
-        private const string PRINT_QUANTITY = "ContentPlaceHolder1_txtPrintQty";
-
-        private string PATH = Path.Combine(@"D:\JinYunki\Leak_UI2\Leak_UI\bin\Release", "LabelConfig.xlsx");
-
         private SerialPort serialPort1;
         private ChromeDriverService driverService;
         private ChromeOptions options;
         private ChromeDriver driver;
         private IDispatcher dispatcher;
 
-        #endregion
+        public MainViewModel(IDispatcher dispatcher) {
+            model = new Model.MainModel();
+            this.dispatcher = dispatcher;
+            OpenSerialPort();
+            BtnEvent();
+            WinBtnEvent();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            Model.NumberOfColumns = 5; // 가로
+            Model.NumberOfRows = 3; // 세로
+        }
+        
 
         #region GridViewStyle
-
-        private int _numberOfRows = 1;
-        public int NumberOfRows {
-            get { return _numberOfRows; }
-            set {
-                _numberOfRows = value;
-                RaisePropertyChanged(nameof(NumberOfRows));
-            }
-        }
-
-        private int _numberOfColumns = 1;
-        public int NumberOfColumns {
-            get { return _numberOfColumns; }
-            set {
-                _numberOfColumns = value;
-                RaisePropertyChanged(nameof(NumberOfColumns));
-            }
-        }
-
         private ObservableCollection<GridItem> _gridData;
         public ObservableCollection<GridItem> GridData {
             get { return _gridData; }
@@ -89,142 +56,11 @@ namespace Leak_UI.ViewModel
                 RaisePropertyChanged(nameof(GridData));
             }
         }
-        public class GridItem
-        {
-            private int index;
-            public int Index {
-                get { return index; }
-                set {
-                    if (index != value) {
-                        index = value;
-                        OnPropertyChanged(nameof(Index));
-                    }
-                }
-            }
-
-            private int value;
-            public int Value {
-                get { return value; }
-                set {
-                    if (this.value != value) {
-                        this.value = value;
-                        OnPropertyChanged(nameof(Value));
-                        //UpdateBackground();
-                    }
-                }
-            }
-            private void UpdateBackground() {
-                // Set the background color based on the value
-                Background = (Value == 0) ? Brushes.White : Brushes.Red;
-            }
-
-            private Brush _background;
-            public Brush Background {
-                get { return _background; }
-                set {
-                    if (_background != value) {
-                        _background = value;
-                        OnPropertyChanged(nameof(Background));
-                    }
-                }
-            }
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            protected virtual void OnPropertyChanged(string propertyName) {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-        #endregion
-
-        #region Property Item List
-
-        //PrintProgress
-        private string printProgress = "출력 대기";
-        public string PrintProgress {
-            get { return printProgress; }
-            set {
-                printProgress = value;
-                RaisePropertyChanged("PrintProgress");
-            }
-        }
-
-        // 박스 라벨 타입
-        private string labelType = "LABEL TYPE";
-        public string LabelType {
-            get { return labelType; }
-            set {
-                labelType = value;
-                RaisePropertyChanged("BoxType");
-            }
-        }
-
-        // 포트 연결 상태
-        private string resultConnect = "포트 연결을 눌러 주세요";
-        public string ResultConnect {
-            get { return resultConnect; }
-            set {
-                resultConnect = value;
-                RaisePropertyChanged("ResultConnect");
-            }
-        }
-
-        // 품번 입력
-        private string product_ID = "작업지시서를 스캔 하세요";
-        public string Product_ID {
-            get { return product_ID; }
-            set {
-                product_ID = value;
-                RaisePropertyChanged("Product_ID");
-            }
-        }
-
-        // Model Serial
-        private string modelSerial = "";
-        public string ModelSerial {
-            get { return modelSerial; }
-            set {
-                modelSerial = value;
-                RaisePropertyChanged("ModelSerial");
-            }
-        }
-        // ModelScanCount
-        private int scanCount;
-        public int ScanCount {
-            get { return scanCount; }
-            set {
-                scanCount = value;
-                RaisePropertyChanged("ScanCount");
-            }
-        }
-        
-
-        // BoxSize
-        private string boxSize = "1";
-        public string BoxSize {
-            get { return boxSize; }
-            set {
-                boxSize = value;
-                RaisePropertyChanged("BoxSize");
-            }
-        }
-
-        // 발행 수량
-        private string printCount = "1";
-        public string PrintCount {
-            get { return printCount; }
-            set {
-                printCount = value;
-                RaisePropertyChanged("PrintCount");
-            }
-        }
-
-        public ICommand BtnPrintCommand { get; set; }
-        public ICommand BtnPortConnectCommand { get; set; }
         #endregion
 
         #region ExcelDataRead
-        private string ReadExcelData(string filePath, string targetData) {
-            FileInfo fileInfo = new FileInfo(filePath);
+        private string ReadExcelData(string returnValue) {
+            FileInfo fileInfo = new FileInfo(Model.PATH);
 
             using (ExcelPackage package = new ExcelPackage(fileInfo)) {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // 첫 번째 워크시트 선택
@@ -235,21 +71,26 @@ namespace Leak_UI.ViewModel
                 for (int row = 1; row <= rows; row++) {
                     string cellValue = worksheet.Cells[row, 1].Value?.ToString(); // A열 값 읽기 [ 품번 , ProductID ]
 
-                    /// A열 값 기준으로 순환중에 들어오는 targetData를 만나게 되면 C,D열 값을 반환
-                    /// 두 열값을 각각 받아서 , 다시한번 조건을 걸어서 , 각각 반환타입이 다르게 해야함.
-                    /// 그게아니면 라벨타입과 박스카운트를 각각 받아서 "/" 스플릿으로 진행해야함.
-                    if (cellValue == targetData) {
-                        string LabelType = worksheet.Cells[row, 3].Value?.ToString(); // C열 값 읽기 [ Label Type ]
+                    if (cellValue == Model.Product_ID) {
+                        Model.LabelType = worksheet.Cells[row, 3].Value?.ToString(); // C열 값 읽기 [ Label Type ]
                         
                         string colunmStr = worksheet.Cells[row, 4].Value?.ToString(); // D열 값 읽기 [ 가로 박스 개수 ]
-                        NumberOfColumns = Int32.Parse(colunmStr);
+                        Model.NumberOfColumns = Int32.Parse(colunmStr);
 
                         string rowStr = worksheet.Cells[row, 5].Value?.ToString(); // E열 값 읽기 [ 새로 박스 개수 ]
-                        NumberOfRows = Int32.Parse(rowStr);
+                        Model.NumberOfRows = Int32.Parse(rowStr);
 
-                        ModelSerial = worksheet.Cells[row, 6].Value?.ToString(); // ModelSerial
-
-                        return LabelType;
+                        Model.ModelSerial = worksheet.Cells[row, 6].Value?.ToString(); // ModelSerial
+                        
+                        Model.BoxColorString = worksheet.Cells[row, 7].Value?.ToString(); // boxColor Convert To String
+                        
+                        Model.MatchItem1 = worksheet.Cells[row, 8].Value?.ToString(); // matchItem1
+                        Model.MatchItem2 = worksheet.Cells[row, 9].Value?.ToString(); // matchItem3
+                        Model.MatchItem3 = worksheet.Cells[row, 10].Value?.ToString(); // matchItem3
+                        
+                        if (returnValue == Model.LabelType || returnValue == Model.ModelSerial || returnValue == Model.BoxColorString || returnValue == Model.MatchItem1 || returnValue == Model.MatchItem2 || returnValue == Model.MatchItem3) {
+                            return returnValue;
+                        }
                     }
                 }
             }
@@ -257,11 +98,15 @@ namespace Leak_UI.ViewModel
             return null; // 해당 데이터가 없는 경우 null 반환
         }
         #endregion
-
+        #region MatchSystem
+        private bool MatchChecking(string matchData, string matchResult) {
+            return matchData == matchResult; //  같은경우 true 아닌경우 false
+        }
+        #endregion
 
         private void BtnEvent() {
-            BtnPortConnectCommand = new Command(BtnPortConnect_Click, CanExCute);
-            BtnPrintCommand = new Command(BtnPrint_Click, CanExCute);
+            Model.BtnPortConnectCommand = new Command(BtnPortConnect_Click, CanExCute);
+            Model.BtnPrintCommand = new Command(BtnPrint_Click, CanExCute);
         }
 
         private bool CanExCute(object obj) {
@@ -269,7 +114,7 @@ namespace Leak_UI.ViewModel
         }
 
         private void BtnPrint_Click(object obj) {
-            PrintProgress = "출력 시작";
+            Model.PrintProgress = "출력 시작";
             driverService = ChromeDriverService.CreateDefaultService();
 
             // 크롤링 드라이버 CMD창 Hide
@@ -286,14 +131,14 @@ namespace Leak_UI.ViewModel
 
             driver = new ChromeDriver(driverService, options);
 
-            driver.Navigate().GoToUrl(webUri);
+            driver.Navigate().GoToUrl(Model.webUri);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
 
             // 아이디 입력
-            SendTextInput(driver, "txtUserID", id);
+            SendTextInput(driver, "txtUserID", Model.id);
             Thread.Sleep(200);
             // 비밀번호 입력
-            SendTextInput(driver, "txtPassword", ps);
+            SendTextInput(driver, "txtPassword", Model.ps);
             Thread.Sleep(200);
             // 로그인 클릭
             ClickByBtn(driver, "btnLogin");
@@ -311,49 +156,50 @@ namespace Leak_UI.ViewModel
 
             Thread.Sleep(1000);
             // 라벨 선택 
-            switch (LabelType) {
+            switch (Model.LabelType) {
                 case "H_LARGE":
                     // 라벨 선택 (현대 대 - 1330*2800)
-                    ClickByXPath(driver, BOX_LABEL_HYUNDAI_LARGE);
+                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_LARGE);
                     break;
                 case "H_MIDDLE":
                     // 라벨 선택 (현대 중 - 1580*1400)
-                    ClickByXPath(driver, BOX_LABEL_HYUNDAI_MIDDLE);
+                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_MIDDLE);
                     break;
                 case "H_SMALL":
                     // 라벨 선택 (현대 소 - 1345*1430)
-                    ClickByXPath(driver, BOX_LABEL_HYUNDAI_SMALL);
+                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_SMALL);
                     break;
                 case "K_LARGE":
                     // 라벨 선택 (기아 대 - 1100*2900)
-                    ClickByXPath(driver, BOX_LABEL_KIA_LARGE);
+                    ClickByXPath(driver, Model.BOX_LABEL_KIA_LARGE);
                     break;
                 case "K_MIDDLE":
                     // 라벨 선택 (기아 중 - 1600*1400)
-                    ClickByXPath(driver, BOX_LABEL_KIA_MIDDLE);
+                    ClickByXPath(driver, Model.BOX_LABEL_KIA_MIDDLE);
                     break;
             }
 
 
             // 고객 품번 입력
-            SendTextInput(driver, MODEL_PRODUCT_ID, Product_ID);
+            SendTextInput(driver, Model.MODEL_PRODUCT_ID, Model.Product_ID);
 
             Thread.Sleep(2000);
             // 포장 수량 입력
-            SendTextInput(driver, PACKAGED_QUANTITY, ScanCount.ToString());
+            SendTextInput(driver, Model.PACKAGED_QUANTITY, Model.ScanCount.ToString());
             Thread.Sleep(1000);
 
             // 발행 수량 입력
-            SendTextInput(driver, PRINT_QUANTITY, PrintCount);
+            SendTextInput(driver, Model.PRINT_QUANTITY, Model.PrintCount);
 
 
             // 마지막 쿼리 데이터 확인 완료 
             Thread.Sleep(1000);
             ClickByXPath(driver, "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]");
         }
+        
 
         private void LetsGoPrint() {
-            PrintProgress = "출력 시작";
+            Model.PrintProgress = "출력 시작";
             driverService = ChromeDriverService.CreateDefaultService();
 
             // 크롤링 드라이버 CMD창 Hide
@@ -370,14 +216,14 @@ namespace Leak_UI.ViewModel
 
             driver = new ChromeDriver(driverService, options);
 
-            driver.Navigate().GoToUrl(webUri);
+            driver.Navigate().GoToUrl(Model.webUri);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
 
             // 아이디 입력
-            SendTextInput(driver, "txtUserID", id);
+            SendTextInput(driver, "txtUserID", Model.id);
             Thread.Sleep(200);
             // 비밀번호 입력
-            SendTextInput(driver, "txtPassword", ps);
+            SendTextInput(driver, "txtPassword", Model.ps);
             Thread.Sleep(200);
             // 로그인 클릭
             ClickByBtn(driver, "btnLogin");
@@ -392,44 +238,42 @@ namespace Leak_UI.ViewModel
             // 상단탭 부품식별표 클릭
             ClickByBtn(driver, "lblCategory_MOTOR_LABEL");
 
-
             Thread.Sleep(1000);
             // 라벨 선택 
-            switch (LabelType) {
+            switch (Model.LabelType) {
                 case "H_LARGE":
                     // 라벨 선택 (현대 대 - 1330*2800)
-                    ClickByXPath(driver, BOX_LABEL_HYUNDAI_LARGE);
+                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_LARGE);
                     break;
                 case "H_MIDDLE":
                     // 라벨 선택 (현대 중 - 1580*1400)
-                    ClickByXPath(driver, BOX_LABEL_HYUNDAI_MIDDLE);
+                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_MIDDLE);
                     break;
                 case "H_SMALL":
                     // 라벨 선택 (현대 소 - 1345*1430)
-                    ClickByXPath(driver, BOX_LABEL_HYUNDAI_SMALL);
+                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_SMALL);
                     break;
                 case "K_LARGE":
                     // 라벨 선택 (기아 대 - 1100*2900)
-                    ClickByXPath(driver, BOX_LABEL_KIA_LARGE);
+                    ClickByXPath(driver, Model.BOX_LABEL_KIA_LARGE);
                     break;
                 case "K_MIDDLE":
                     // 라벨 선택 (기아 중 - 1600*1400)
-                    ClickByXPath(driver, BOX_LABEL_KIA_MIDDLE);
+                    ClickByXPath(driver, Model.BOX_LABEL_KIA_MIDDLE);
                     break;
             }
 
 
             // 고객 품번 입력
-            SendTextInput(driver, MODEL_PRODUCT_ID, Product_ID);
+            SendTextInput(driver, Model.MODEL_PRODUCT_ID, Model.Product_ID);
 
             Thread.Sleep(2000);
             // 포장 수량 입력
-            SendTextInput(driver, PACKAGED_QUANTITY, ScanCount.ToString());
+            SendTextInput(driver, Model.PACKAGED_QUANTITY, Model.ScanCount.ToString());
             Thread.Sleep(1000);
 
             // 발행 수량 입력
-            SendTextInput(driver, PRINT_QUANTITY, PrintCount);
-
+            SendTextInput(driver, Model.PRINT_QUANTITY, Model.PrintCount);
 
             // 마지막 쿼리 데이터 확인 완료 
             Thread.Sleep(1000);
@@ -451,12 +295,12 @@ namespace Leak_UI.ViewModel
                     Parity = Parity.None
                 };
 
-                serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived);
+                serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived);
 
                 serialPort1.Open();
-                ResultConnect = "포트 연결";
+                Model.ResultConnect = "포트 연결";
             } catch (UnauthorizedAccessException ex) {
-                ResultConnect = "액세스 거부: " + ex.Message;
+                Model.ResultConnect = "액세스 거부: " + ex.Message;
                 Console.WriteLine("액세스 거부: " + ex.Message);
                 // 포트 액세스 거부 예외 처리
                 // 포트를 닫고 다시 열어보세요.
@@ -464,72 +308,94 @@ namespace Leak_UI.ViewModel
                 serialPort1?.Dispose();
                 OpenSerialPort(); // 재귀적으로 메서드 호출
             } catch (Exception ex) {
-                ResultConnect = "연결 오류: " + ex.Message;
+                Model.ResultConnect = "연결 오류: " + ex.Message;
                 Console.WriteLine("연결 오류: " + ex.Message);
             }
         }
 
         private void BtnPortConnect_Click(object obj) {
-            serialPort1 = new SerialPort();
             if (serialPort1 != null && serialPort1.IsOpen) {  // 이미 포트가 열려 있는 경우
                 serialPort1.Close();  // 포트 닫기
                 serialPort1.Dispose();
+                Model.ResultConnect = "연결 종료";
             }
+
+            /*
             serialPort1.PortName = "COM3";  //콤보박스의 선택된 COM포트명을 시리얼포트명으로 지정
             serialPort1.BaudRate = 9600;  //보레이트 변경이 필요하면 숫자 변경하기
             serialPort1.DataBits = 8;
             serialPort1.StopBits = StopBits.One;
             serialPort1.Parity = Parity.None;
-            serialPort1.DataReceived += new SerialDataReceivedEventHandler(serialPort1_DataReceived); //이것이 꼭 필요하다
+            serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived); //이것이 꼭 필요하다
 
             try {
                 serialPort1.Open();  // 시리얼포트 열기
-                ResultConnect = "포트 연결";
+                Model.ResultConnect = "포트 연결";
             } catch (Exception ex) {
-                ResultConnect = "연결 오류 : " + ex.Message;
+                Model.ResultConnect = "연결 오류 : " + ex.Message;
             }
+            */
         }
 
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)  //수신 이벤트가 발생하면 이 부분이 실행된다.
-        {
+        private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e) {
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
             string[] indataModel = indata.Split('-');
             string resultData = indataModel[0];
 
-            /// 23 06 29 이곳에서 분기를 쳐야할거같다 . 99~이면 ModelText에 resultData를 넣어주고 ,
-            /// startwith가 T~이면 해당 모델의 , 제품이 맞는지 검증후, Count를 증가시켜서 라벨출력까지 이어져야함.
-            dispatcher.Invoke(() => {
-                if (resultData.StartsWith("T")) 
-                {
-                    ModelSerial = resultData;
-                    ScanCount++;
-                    if (ScanCount > 0 && ScanCount.ToString() == BoxSize) {
-                        LetsGoPrint();
-                    }
-                } 
-                else 
-                {
-                    Product_ID = resultData;
-                    LabelType = ReadExcelData(PATH, Product_ID);
-                }
-
+            dispatcher.Invoke(() =>
+            {
                 GridData = new ObservableCollection<GridItem>();
-                for (int i = 0; i < NumberOfColumns * NumberOfRows; i++) {
-                    GridItem item = new GridItem() {
-                        Index = i + 1,
-                        Value = 0,
-                    };
-                    
-                    if (i <= ScanCount - 1) {
-                        item.Background = Brushes.Green;
-                    }
-                    GridData.Add(item);
 
+                if (resultData.StartsWith("T")) {
+                    HandleModelSerial(resultData);
+                } else if (resultData.StartsWith("9")) {
+                    HandleProductID(resultData);
                 }
-                BoxSize = GridData.Count.ToString();
+                GenerateGridItems();
+                Model.BoxSize = GridData.Count.ToString();
             });
         }
+
+        // ModelCounting
+        private void HandleModelSerial(string resultData) {
+            if (Model.ModelSerial == resultData) {
+                // 매칭할것이 없을때
+                if (Model.MatchItem1 == null && Model.MatchItem2 == null && Model.MatchItem3 == null) {
+                    Model.ScanCount++;
+                }
+
+                if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
+                    LetsGoPrint();
+                }
+            } else {
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 모델을 확인하세요.");
+            }
+        }
+
+        // ProductIdCatch
+        private void HandleProductID(string resultData) {
+            Model.Product_ID = resultData;
+            ReadExcelData(Model.LabelType);
+        }
+        // Grid Add
+        private void GenerateGridItems() {
+            for (int i = 0; i < Model.NumberOfColumns * Model.NumberOfRows; i++) {
+                GridItem gridItem = new GridItem {
+                    Index = i + 1,
+                    ModelSerial = "",
+                    Background = Brushes.White
+                };
+
+                if (i < Model.ScanCount) {
+                    gridItem.Background = Brushes.Green;
+                    gridItem.ModelSerial = Model.ModelSerial;
+                }
+
+                GridData.Add(gridItem);
+            }
+        }
+
 
 
         #region Web I/O Method
@@ -544,7 +410,7 @@ namespace Leak_UI.ViewModel
             }
 
             // 포장 수량 입력시 엔터로 적용
-            if (elementId.Equals(PACKAGED_QUANTITY)) {
+            if (elementId.Equals(Model.PACKAGED_QUANTITY)) {
                 element.SendKeys(Keys.Enter);
                 try {
                     driver.SwitchTo().Alert().Accept();
@@ -554,7 +420,7 @@ namespace Leak_UI.ViewModel
             }
 
             // 발행 수량 입력 후 엔터로 출력 진행
-            if (elementId.Equals(PRINT_QUANTITY)) {
+            if (elementId.Equals(Model.PRINT_QUANTITY)) {
                 element.SendKeys(Keys.Enter);
                 try {
                     driver.SwitchTo().Alert().Accept();
@@ -594,7 +460,7 @@ namespace Leak_UI.ViewModel
 
                 // 
                 if (resultTest < 5) {
-                    PrintProgress = "출력 완료 !";
+                    Model.PrintProgress = "출력 완료 !";
                 }
             }
         }
