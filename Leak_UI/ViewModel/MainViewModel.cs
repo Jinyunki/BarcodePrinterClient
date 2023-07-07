@@ -368,7 +368,7 @@ namespace Leak_UI.ViewModel
 
 
         // Grid Add
-        private void AddGridItems(string intpuSerial) {
+        private void AddGridItems(string inpuSerial) {
             for (int i = 0; i < Model.NumberOfColumns * Model.NumberOfRows; i++) {
                 GridItem gridItem = new GridItem {
                     Index = i + 1,
@@ -383,35 +383,44 @@ namespace Leak_UI.ViewModel
                     gridItem.ModelSerial = Model.ModelSerial;
 
                     if (Model.MatchCount > 0) {
-                        for (int j = 0; j < Model.MatchCount; j++) {
-                            MatchItemData matchItem = new MatchItemData {
-                                MatchModelSerial = "TEST",
-                                MatchBackground = Brushes.White
-                            };
-                            if (j < gridItem.MatchItem.Count) {
-                                matchItem = gridItem.MatchItem[j];
-                            }
-                            if (j < Model.MatchData.Count) {
-
-                                if (Model.MatchData[j] == intpuSerial) {
-                                    matchItem.MatchModelSerial = intpuSerial;
-                                    matchItem.MatchBackground = Brushes.Green;
-
-                                    Model.SaveMatchItem[j].MatchModelSerial = intpuSerial;
-                                    Model.SaveMatchItem[j].MatchBackground = Brushes.Green;
-                                } 
-                            } 
-                            matchItem.MatchModelSerial = Model.SaveMatchItem[j].MatchModelSerial;
-                            matchItem.MatchBackground = Model.SaveMatchItem[j].MatchBackground;
-                            gridItem.MatchItem.Add(matchItem);
-                        }
+                        AddMatchItems(gridItem, inpuSerial);
                     }
                 }
+
                 GridData.Add(gridItem);
             }
         }
-        
-        
+
+        private void AddMatchItems(GridItem gridItem, string inpuSerial) {
+            for (int j = 0; j < Model.MatchCount; j++) {
+                MatchItemData matchItem = new MatchItemData {
+                    MatchModelSerial = "TEST",
+                    MatchBackground = Brushes.White
+                };
+
+                if (j < Model.MatchData.Count) {
+                    if (Model.MatchData[j] == inpuSerial && inpuSerial.StartsWith("M")) {
+                        matchItem.MatchModelSerial = inpuSerial;
+                        matchItem.MatchBackground = Brushes.Green;
+
+                        Model.SaveMatchItem[j].MatchModelSerial = inpuSerial;
+                        Model.SaveMatchItem[j].MatchBackground = Brushes.Green;
+                    }
+                }
+
+                // Get the existing match item data from the Model if it exists
+                if (j < Model.SaveMatchItem.Count) {
+                    matchItem.MatchModelSerial = Model.SaveMatchItem[j].MatchModelSerial;
+                    matchItem.MatchBackground = Model.SaveMatchItem[j].MatchBackground;
+                }
+
+                gridItem.MatchItem.Add(matchItem);
+            }
+        }
+
+
+
+
         #region Web I/O Method
         // Input Text
         void SendTextInput(IWebDriver driver, string elementId, string text) {
