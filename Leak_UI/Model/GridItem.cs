@@ -1,79 +1,53 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Media;
 
 namespace Leak_UI.Model
 {
-    public class GridItem
+    public class GridItem : INotifyPropertyChanged
     {
-        private int index;
-        public int Index {
-            get { return index; }
-            set {
-                if (index != value) {
-                    index = value;
-                    OnPropertyChanged(nameof(Index));
-                }
-            }
-        }
-
-        private string modelSerial;
-        public string ModelSerial {
-            get { return modelSerial; }
-            set {
-                if (this.modelSerial != value) {
-                    this.modelSerial = value;
-                    OnPropertyChanged(nameof(ModelSerial));
-                }
-            }
-        }
-
-        private Brush _background;
-        public Brush Background {
-            get { return _background; }
-            set {
-                if (_background != value) {
-                    _background = value;
-                    OnPropertyChanged(nameof(Background));
-                }
-            }
-        }
-        private string matchItem1;
-        public string MatchItem1 {
-            get { return matchItem1; }
-            set {
-                if (this.matchItem1 != value) {
-                    this.matchItem1 = value;
-                    OnPropertyChanged(nameof(MatchItem1));
-                }
-            }
-        }
-        private string matchItem2;
-        public string MatchItem2 {
-            get { return matchItem2; }
-            set {
-                if (this.matchItem2 != value) {
-                    this.matchItem2 = value;
-                    OnPropertyChanged(nameof(MatchItem2));
-                }
-            }
-        }
-        private string matchItem3;
-        public string MatchItem3 {
-            get { return matchItem3; }
-            set {
-                if (this.matchItem3 != value) {
-                    this.matchItem3 = value;
-                    OnPropertyChanged(nameof(MatchItem3));
-                }
-            }
-        }
-
-
+        public List<MatchItemData> MatchItem { get; set; }
+        public int Index { get; set; }
+        public string ModelSerial { get; set; }
+        public Brush Background { get; set; }
+        public int GridRowSpan { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public class MatchItemData : INotifyPropertyChanged
+        {
+            private string matchModelSerial;
+            private Brush matchBackground = Brushes.White;
+
+            public string MatchModelSerial {
+                get { return matchModelSerial; }
+                set {
+                    if (matchModelSerial != value) {
+                        matchModelSerial = value;
+                        OnPropertyChanged(nameof(MatchModelSerial));
+                    }
+                }
+            }
+
+            public Brush MatchBackground {
+                get { return matchBackground; }
+                set {
+                    if (matchBackground != value) {
+                        matchBackground = value;
+                        OnPropertyChanged(nameof(MatchBackground));
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged(string propertyName) {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

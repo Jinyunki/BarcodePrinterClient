@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
+using static Leak_UI.Model.GridItem;
 
 namespace Leak_UI.Model
 {
@@ -24,9 +26,34 @@ namespace Leak_UI.Model
         public string PACKAGED_QUANTITY = "ContentPlaceHolder1_txtPackQty";
         public string PRINT_QUANTITY = "ContentPlaceHolder1_txtPrintQty";
         public string PATH = Path.Combine(@"D:\JinYunki\Leak_UI2\Leak_UI\bin\Release", "LabelConfig.xlsx");
-        
+
         #endregion
         #region GridViewStyle
+        private List<MatchItemData> saveMatchItem = new List<MatchItemData>();
+        public List<MatchItemData> SaveMatchItem {
+            get { return saveMatchItem; }
+            set {
+                saveMatchItem = value;
+                RaisePropertyChanged(nameof(SaveMatchItem));
+            }
+        }
+
+        private List<string> matchData = new List<string>();
+        public List<string> MatchData {
+            get { return matchData; }
+            set {
+                matchData = value;
+                RaisePropertyChanged(nameof(MatchData));
+            }
+        }
+        private int _matchCount = 0;
+        public int MatchCount {
+            get { return _matchCount; }
+            set {
+                _matchCount = value;
+                RaisePropertyChanged(nameof(MatchCount));
+            }
+        }
 
         private int _numberOfRows = 1;
         public int NumberOfRows {
@@ -46,42 +73,9 @@ namespace Leak_UI.Model
             }
         }
 
-        private ObservableCollection<GridItem> _gridData;
-        public ObservableCollection<GridItem> GridData {
-            get { return _gridData; }
-            set {
-                _gridData = value;
-                RaisePropertyChanged(nameof(GridData));
-            }
-        }
-
         #endregion
         #region Property Item List
-
-        private string matchItme1;
-        public string MatchItem1 {
-            get { return matchItme1; }
-            set {
-                matchItme1 = value;
-                RaisePropertyChanged("MatchItem1");
-            }
-        }
-        private string matchItme2;
-        public string MatchItem2 {
-            get { return matchItme2; }
-            set {
-                matchItme2 = value;
-                RaisePropertyChanged("MatchItem2");
-            }
-        }
-        private string matchItme3;
-        public string MatchItem3 {
-            get { return matchItme3; }
-            set {
-                matchItme3 = value;
-                RaisePropertyChanged("MatchItem3");
-            }
-        }
+       
         //PrintProgress
         private string printProgress = "출력 대기";
         public string PrintProgress {

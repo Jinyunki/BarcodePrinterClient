@@ -14,8 +14,11 @@ using System.Collections.ObjectModel;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using System.Windows.Media;
 using Brushes = System.Windows.Media.Brushes;
 using Leak_UI.Model;
+using System.Collections.Generic;
+using static Leak_UI.Model.GridItem;
 
 namespace Leak_UI.ViewModel
 {
@@ -24,8 +27,8 @@ namespace Leak_UI.ViewModel
         /// <summary>
         /// Model List Set
         /// </summary>
-        private Model.MainModel model = null;
-        public Model.MainModel Model {
+        private MainModel model = null;
+        public MainModel Model {
             get { return model; }
             set { model = value; RaisePropertyChanged("Model"); }
         }
@@ -45,7 +48,7 @@ namespace Leak_UI.ViewModel
             Model.NumberOfColumns = 5; // 가로
             Model.NumberOfRows = 3; // 세로
         }
-        
+
 
         #region GridViewStyle
         private ObservableCollection<GridItem> _gridData;
@@ -56,6 +59,7 @@ namespace Leak_UI.ViewModel
                 RaisePropertyChanged(nameof(GridData));
             }
         }
+
         #endregion
 
         #region ExcelDataRead
@@ -73,7 +77,7 @@ namespace Leak_UI.ViewModel
 
                     if (cellValue == Model.Product_ID) {
                         Model.LabelType = worksheet.Cells[row, 3].Value?.ToString(); // C열 값 읽기 [ Label Type ]
-                        
+
                         string colunmStr = worksheet.Cells[row, 4].Value?.ToString(); // D열 값 읽기 [ 가로 박스 개수 ]
                         Model.NumberOfColumns = Int32.Parse(colunmStr);
 
@@ -81,14 +85,21 @@ namespace Leak_UI.ViewModel
                         Model.NumberOfRows = Int32.Parse(rowStr);
 
                         Model.ModelSerial = worksheet.Cells[row, 6].Value?.ToString(); // ModelSerial
-                        
+
                         Model.BoxColorString = worksheet.Cells[row, 7].Value?.ToString(); // boxColor Convert To String
-                        
-                        Model.MatchItem1 = worksheet.Cells[row, 8].Value?.ToString(); // matchItem1
-                        Model.MatchItem2 = worksheet.Cells[row, 9].Value?.ToString(); // matchItem3
-                        Model.MatchItem3 = worksheet.Cells[row, 10].Value?.ToString(); // matchItem3
-                        
-                        if (returnValue == Model.LabelType || returnValue == Model.ModelSerial || returnValue == Model.BoxColorString || returnValue == Model.MatchItem1 || returnValue == Model.MatchItem2 || returnValue == Model.MatchItem3) {
+
+                        string matchNumberOfRows = worksheet.Cells[row, 11].Value?.ToString();
+                        Model.MatchCount = Int32.Parse(matchNumberOfRows);
+
+                        for (int i = 0; i < Model.MatchCount; i++) {
+                            Model.MatchData.Add(worksheet.Cells[row, i + 8].Value?.ToString());
+                            MatchItemData saveMatchItem = new MatchItemData();
+                            Model.SaveMatchItem.Add(saveMatchItem);
+                        }
+
+                        Console.WriteLine("ADD SUCCES , COUNT : " + Model.MatchData.Count);
+
+                        if (returnValue == Model.LabelType || returnValue == Model.ModelSerial || returnValue == Model.BoxColorString) {
                             return returnValue;
                         }
                     }
@@ -98,12 +109,6 @@ namespace Leak_UI.ViewModel
             return null; // 해당 데이터가 없는 경우 null 반환
         }
         #endregion
-        #region MatchSystem
-        private bool MatchChecking(string matchData, string matchResult) {
-            return matchData == matchResult; //  같은경우 true 아닌경우 false
-        }
-        #endregion
-
         private void BtnEvent() {
             Model.BtnPortConnectCommand = new Command(BtnPortConnect_Click, CanExCute);
             Model.BtnPrintCommand = new Command(BtnPrint_Click, CanExCute);
@@ -112,7 +117,7 @@ namespace Leak_UI.ViewModel
         private bool CanExCute(object obj) {
             return true;
         }
-
+        #region 크롤링
         private void BtnPrint_Click(object obj) {
             Model.PrintProgress = "출력 시작";
             driverService = ChromeDriverService.CreateDefaultService();
@@ -196,7 +201,6 @@ namespace Leak_UI.ViewModel
             Thread.Sleep(1000);
             ClickByXPath(driver, "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]");
         }
-        
 
         private void LetsGoPrint() {
             Model.PrintProgress = "출력 시작";
@@ -279,6 +283,9 @@ namespace Leak_UI.ViewModel
             Thread.Sleep(1000);
             ClickByXPath(driver, "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]");
         }
+
+        #endregion
+
         private void OpenSerialPort() {
 
             try {
@@ -319,22 +326,6 @@ namespace Leak_UI.ViewModel
                 serialPort1.Dispose();
                 Model.ResultConnect = "연결 종료";
             }
-
-            /*
-            serialPort1.PortName = "COM3";  //콤보박스의 선택된 COM포트명을 시리얼포트명으로 지정
-            serialPort1.BaudRate = 9600;  //보레이트 변경이 필요하면 숫자 변경하기
-            serialPort1.DataBits = 8;
-            serialPort1.StopBits = StopBits.One;
-            serialPort1.Parity = Parity.None;
-            serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived); //이것이 꼭 필요하다
-
-            try {
-                serialPort1.Open();  // 시리얼포트 열기
-                Model.ResultConnect = "포트 연결";
-            } catch (Exception ex) {
-                Model.ResultConnect = "연결 오류 : " + ex.Message;
-            }
-            */
         }
 
         private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e) {
@@ -343,61 +334,84 @@ namespace Leak_UI.ViewModel
             string[] indataModel = indata.Split('-');
             string resultData = indataModel[0];
 
-            dispatcher.Invoke(() =>
-            {
+            dispatcher.Invoke(() => {
                 GridData = new ObservableCollection<GridItem>();
-
-                if (resultData.StartsWith("T")) {
-                    HandleModelSerial(resultData);
-                } else if (resultData.StartsWith("9")) {
-                    HandleProductID(resultData);
+                if (resultData.StartsWith("9")) {
+                    ReadingData(resultData);
+                } else if (resultData.StartsWith("T")) {
+                    AloneModelCounting(resultData);
                 }
-                GenerateGridItems();
+                AddGridItems(resultData);
                 Model.BoxSize = GridData.Count.ToString();
             });
         }
 
-        // ModelCounting
-        private void HandleModelSerial(string resultData) {
-            if (Model.ModelSerial == resultData) {
-                // 매칭할것이 없을때
-                if (Model.MatchItem1 == null && Model.MatchItem2 == null && Model.MatchItem3 == null) {
-                    Model.ScanCount++;
-                }
+        // ReadingExcelData
+        private void ReadingData(string resultData) {
+            Model.Product_ID = resultData;
+            ReadExcelData(Model.LabelType);
+        }
 
+        // ModelCounting - 매칭없이 단독일때
+        private void AloneModelCounting(string resultData) {
+            if (Model.ModelSerial == resultData) {
+                    Model.ScanCount++;
+                //if (Model.MatchCount <= 0) {
+                //}
                 if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
                     LetsGoPrint();
                 }
             } else {
-                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 모델을 확인하세요.");
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 위치 모델을 확인하세요.");
             }
         }
 
-        // ProductIdCatch
-        private void HandleProductID(string resultData) {
-            Model.Product_ID = resultData;
-            ReadExcelData(Model.LabelType);
-        }
+
         // Grid Add
-        private void GenerateGridItems() {
+        private void AddGridItems(string intpuSerial) {
             for (int i = 0; i < Model.NumberOfColumns * Model.NumberOfRows; i++) {
                 GridItem gridItem = new GridItem {
                     Index = i + 1,
                     ModelSerial = "",
-                    Background = Brushes.White
+                    Background = Brushes.White,
+                    MatchItem = new List<MatchItemData>(),
+                    GridRowSpan = 2
                 };
 
                 if (i < Model.ScanCount) {
                     gridItem.Background = Brushes.Green;
                     gridItem.ModelSerial = Model.ModelSerial;
-                }
 
+                    if (Model.MatchCount > 0) {
+                        for (int j = 0; j < Model.MatchCount; j++) {
+                            MatchItemData matchItem = new MatchItemData {
+                                MatchModelSerial = "TEST",
+                                MatchBackground = Brushes.White
+                            };
+                            if (j < gridItem.MatchItem.Count) {
+                                matchItem = gridItem.MatchItem[j];
+                            }
+                            if (j < Model.MatchData.Count) {
+
+                                if (Model.MatchData[j] == intpuSerial) {
+                                    matchItem.MatchModelSerial = intpuSerial;
+                                    matchItem.MatchBackground = Brushes.Green;
+
+                                    Model.SaveMatchItem[j].MatchModelSerial = intpuSerial;
+                                    Model.SaveMatchItem[j].MatchBackground = Brushes.Green;
+                                } 
+                            } 
+                            matchItem.MatchModelSerial = Model.SaveMatchItem[j].MatchModelSerial;
+                            matchItem.MatchBackground = Model.SaveMatchItem[j].MatchBackground;
+                            gridItem.MatchItem.Add(matchItem);
+                        }
+                    }
+                }
                 GridData.Add(gridItem);
             }
         }
-
-
-
+        
+        
         #region Web I/O Method
         // Input Text
         void SendTextInput(IWebDriver driver, string elementId, string text) {
@@ -488,7 +502,7 @@ namespace Leak_UI.ViewModel
             BtnClose = new RelayCommand(WindowClose);
         }
 
-       
+
         // Window Minimize
         private void WinMinmize() {
             WindowState = WindowState.Minimized;
@@ -498,7 +512,7 @@ namespace Leak_UI.ViewModel
         private void WinMaxSize() {
             WindowState = (WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
         }
-        
+
 
         private void WindowClose() {
             serialPort1.Close();
