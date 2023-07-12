@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="Leak_UI.View.SideMenuTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Leak_UI.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="70">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="D:\JinYunki\Leak_UI2\Leak_UI\GUI_Design_Dictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        
+        <!--MainHome-->
+        <Button  Grid.Row="0" Margin="5"
+                 Style="{StaticResource Close_btn}"
+                 Command="{Binding Model.BtnCurrentView}" >
+            <Button.Background>
+                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_home.png"/>
+            </Button.Background>
+        </Button>
+
+        <!--TodayWorkCount-->
+        <Button  Grid.Row="1" Margin="5"
+                 Style="{StaticResource Close_btn}"
+                 Command="{Binding Model.BtnCurrentView}" >
+            <Button.Background>
+                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_today_dataList.png"/>
+            </Button.Background>
+        </Button>
+    </Grid>
+</UserControl>

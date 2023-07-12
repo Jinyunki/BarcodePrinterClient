@@ -1,24 +1,17 @@
 using GalaSoft.MvvmLight;
 using Leak_UI.Utiles;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System;
-using System.IO;
 using System.IO.Ports;
-using System.Threading;
 using System.Windows.Input;
 using OfficeOpenXml;
 using Command = Leak_UI.Utiles.Command;
-using System.Globalization;
 using System.Collections.ObjectModel;
 using LicenseContext = OfficeOpenXml.LicenseContext;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
-using System.Windows.Media;
 using Brushes = System.Windows.Media.Brushes;
 using Leak_UI.Model;
-using System.Collections.Generic;
-using static Leak_UI.Model.GridItem;
 
 namespace Leak_UI.ViewModel
 {
@@ -45,59 +38,11 @@ namespace Leak_UI.ViewModel
             BtnEvent();
             WinBtnEvent();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            Model.NumberOfColumns = 5; // 가로
-            Model.NumberOfRows = 3; // 세로
         }
-
-
-        
-
-        #region ExcelDataRead
-        private string ReadExcelData(string returnValue) {
-            FileInfo fileInfo = new FileInfo(Model.PATH);
-
-            using (ExcelPackage package = new ExcelPackage(fileInfo)) {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // 첫 번째 워크시트 선택
-
-                int rows = worksheet.Dimension.Rows; // 세로 줄의 총 개수
-                int colunm = worksheet.Dimension.Columns;
-
-                for (int row = 1; row <= rows; row++) {
-                    string cellValue = worksheet.Cells[row, 1].Value?.ToString(); // A열 값 읽기 [ 품번 , ProductID ]
-
-                    if (cellValue == Model.Product_ID) {
-
-                        returnValue = worksheet.Cells[row, 3].Value?.ToString();
-                        Model.LabelType = worksheet.Cells[row, 3].Value?.ToString(); // C열 값 읽기 [ Label Type ]
-
-                        string colunmStr = worksheet.Cells[row, 4].Value?.ToString(); // D열 값 읽기 [ 가로 박스 개수 ]
-                        Model.NumberOfColumns = Int32.Parse(colunmStr);
-
-                        string rowStr = worksheet.Cells[row, 5].Value?.ToString(); // E열 값 읽기 [ 새로 박스 개수 ]
-                        Model.NumberOfRows = Int32.Parse(rowStr);
-
-                        Model.ModelSerial = worksheet.Cells[row, 6].Value?.ToString(); // ModelSerial
-
-                        Model.BoxColorString = worksheet.Cells[row, 7].Value?.ToString(); // boxColor Convert To String
-
-                        string matchNumberOfRows = worksheet.Cells[row, 11].Value?.ToString();
-                        Model.MatchCount = Int32.Parse(matchNumberOfRows);
-
-                        for (int i = 0; i < Model.MatchCount; i++) {
-                            Model.MmatchItems.Add(worksheet.Cells[row, i + 8].Value?.ToString());
-                        }
-                    }
-                }
-            }
-
-            return returnValue; // 해당 데이터가 없는 경우 null 반환
-        }
-        #endregion
         private void BtnEvent() {
             Model.BtnPortConnectCommand = new Command(BtnPortConnect_Click, CanExCute);
             Model.BtnPrintCommand = new Command(BtnPrint_Click, CanExCute);
         }
-
         private bool CanExCute(object obj) {
             return true;
         }
@@ -123,70 +68,18 @@ namespace Leak_UI.ViewModel
             driver.Navigate().GoToUrl(Model.webUri);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
 
-            // 아이디 입력
-            SendTextInput(driver, "txtUserID", Model.id);
-            Thread.Sleep(200);
-            // 비밀번호 입력
-            SendTextInput(driver, "txtPassword", Model.ps);
-            Thread.Sleep(200);
-            // 로그인 클릭
-            ClickByBtn(driver, "btnLogin");
-            try {
-                // Web ShowDialog Accept Check
-                driver.SwitchTo().Alert().Accept();
-            } catch (Exception e) {
-                Console.WriteLine(e);
-            }
-            Thread.Sleep(1000);
+            Model.Login(driver);
 
-            // 상단탭 부품식별표 클릭
-            ClickByBtn(driver, "lblCategory_MOTOR_LABEL");
+            Model.SelectLabel(driver);
 
+            Model.InputProductInfo(driver);
 
-            Thread.Sleep(1000);
-            // 라벨 선택 
-            switch (Model.LabelType) {
-                case "H_LARGE":
-                    // 라벨 선택 (현대 대 - 1330*2800)
-                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_LARGE);
-                    break;
-                case "H_MIDDLE":
-                    // 라벨 선택 (현대 중 - 1580*1400)
-                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_MIDDLE);
-                    break;
-                case "H_SMALL":
-                    // 라벨 선택 (현대 소 - 1345*1430)
-                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_SMALL);
-                    break;
-                case "K_LARGE":
-                    // 라벨 선택 (기아 대 - 1100*2900)
-                    ClickByXPath(driver, Model.BOX_LABEL_KIA_LARGE);
-                    break;
-                case "K_MIDDLE":
-                    // 라벨 선택 (기아 중 - 1600*1400)
-                    ClickByXPath(driver, Model.BOX_LABEL_KIA_MIDDLE);
-                    break;
-            }
+            Model.VerifyPrintData(driver);
 
-
-            // 고객 품번 입력
-            SendTextInput(driver, Model.MODEL_PRODUCT_ID, Model.Product_ID);
-
-            Thread.Sleep(2000);
-            // 포장 수량 입력
-            SendTextInput(driver, Model.PACKAGED_QUANTITY, Model.ScanCount.ToString());
-            Thread.Sleep(1000);
-
-            // 발행 수량 입력
-            SendTextInput(driver, Model.PRINT_QUANTITY, Model.PrintCount);
-
-
-            // 마지막 쿼리 데이터 확인 완료 
-            Thread.Sleep(1000);
-            ClickByXPath(driver, "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]");
+            GridData.Clear();
+            Model = new MainModel();
         }
-
-        private void LetsGoPrint() {
+        private void AutoPrint() {
             Model.PrintProgress = "출력 시작";
             driverService = ChromeDriverService.CreateDefaultService();
 
@@ -207,67 +100,14 @@ namespace Leak_UI.ViewModel
             driver.Navigate().GoToUrl(Model.webUri);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
 
-            // 아이디 입력
-            SendTextInput(driver, "txtUserID", Model.id);
-            Thread.Sleep(200);
-            // 비밀번호 입력
-            SendTextInput(driver, "txtPassword", Model.ps);
-            Thread.Sleep(200);
-            // 로그인 클릭
-            ClickByBtn(driver, "btnLogin");
-            try {
-                // Web ShowDialog Accept Check
-                driver.SwitchTo().Alert().Accept();
-            } catch (Exception e) {
-                Console.WriteLine(e);
-            }
-            Thread.Sleep(1000);
+            Model.Login(driver);
 
-            // 상단탭 부품식별표 클릭
-            ClickByBtn(driver, "lblCategory_MOTOR_LABEL");
+            Model.SelectLabel(driver);
 
-            Thread.Sleep(1000);
-            // 라벨 선택 
-            switch (Model.LabelType) {
-                case "H_LARGE":
-                    // 라벨 선택 (현대 대 - 1330*2800)
-                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_LARGE);
-                    break;
-                case "H_MIDDLE":
-                    // 라벨 선택 (현대 중 - 1580*1400)
-                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_MIDDLE);
-                    break;
-                case "H_SMALL":
-                    // 라벨 선택 (현대 소 - 1345*1430)
-                    ClickByXPath(driver, Model.BOX_LABEL_HYUNDAI_SMALL);
-                    break;
-                case "K_LARGE":
-                    // 라벨 선택 (기아 대 - 1100*2900)
-                    ClickByXPath(driver, Model.BOX_LABEL_KIA_LARGE);
-                    break;
-                case "K_MIDDLE":
-                    // 라벨 선택 (기아 중 - 1600*1400)
-                    ClickByXPath(driver, Model.BOX_LABEL_KIA_MIDDLE);
-                    break;
-            }
+            Model.InputProductInfo(driver);
 
-
-            // 고객 품번 입력
-            SendTextInput(driver, Model.MODEL_PRODUCT_ID, Model.Product_ID);
-
-            Thread.Sleep(2000);
-            // 포장 수량 입력
-            SendTextInput(driver, Model.PACKAGED_QUANTITY, Model.ScanCount.ToString());
-            Thread.Sleep(1000);
-
-            // 발행 수량 입력
-            SendTextInput(driver, Model.PRINT_QUANTITY, Model.PrintCount);
-
-            // 마지막 쿼리 데이터 확인 완료 
-            Thread.Sleep(1000);
-            ClickByXPath(driver, "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]");
+            Model.VerifyPrintData(driver);
         }
-
         #endregion
 
         private void OpenSerialPort() {
@@ -286,7 +126,7 @@ namespace Leak_UI.ViewModel
                     Parity = Parity.None
                 };
 
-                serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived_Test);
+                serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived);
 
                 serialPort1.Open();
                 Model.ResultConnect = "포트 연결";
@@ -321,20 +161,10 @@ namespace Leak_UI.ViewModel
                 RaisePropertyChanged(nameof(GridData));
             }
         }
-        //private ObservableCollection<GridItem> GridData = new ObservableCollection<GridItem>();
-
-        private ObservableCollection<MatchItem> _matchData = new ObservableCollection<MatchItem>();
-        public ObservableCollection<MatchItem> MatchData {
-            get { return _matchData; }
-            set {
-                _matchData = value;
-                RaisePropertyChanged(nameof(MatchData));
-            }
-        }
 
         #endregion
-        #region 테스트 구간 07 11
-        private void SerialPort1_DataReceived_Test(object sender, SerialDataReceivedEventArgs e) {
+        #region
+        private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e) {
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
             string[] indataModel = indata.Split('-');
@@ -346,10 +176,12 @@ namespace Leak_UI.ViewModel
                     // 작업지시서 스캔 시 , 메인Grid를 생성한다.
                     if (resultData.StartsWith("9")) {
                         OnCreate_BoxGrid(resultData);
+                        // 모델인식,작업지시서 매칭여부, 해당모델의 매칭데이터 여부
                     } else if (resultData.StartsWith("T")) {
                         OnBinding_BoxGrid(resultData);
+                        // 매칭아이템의 매칭 여부 체크
                     } else if (resultData.StartsWith("M")) {
-                        OnBinding_BoxGrid(resultData);
+                        OnBinding_MatchGrid(resultData);
                     }
 
                     //AddGridItems_TEST();
@@ -361,19 +193,21 @@ namespace Leak_UI.ViewModel
                 
             });
         }
-
+        // 최초 그리드 생성, 엑셀 데이터 리딩
         private void OnCreate_BoxGrid(string data) {
             // 데이터를 읽어와서 GridData에 추가 또는 수정하는 로직
             // 예시: GridData.Add(new GridItem(data));
+            Model.ScanCount = 0;
             GridData.Clear();
             Model.Product_ID = data;
-            ReadExcelData(Model.LabelType);
+            Model.ReadExcelData();
 
             for (int i = 0; i < Model.NumberOfColumns * Model.NumberOfRows; i++) {
                 GridItem gridItem = new GridItem {
                     Index = i + 1,
                     ModelSerial = "",
-                    Background = Brushes.White
+                    Background = Brushes.White,
+                    GridRowSpan = 4 - Model.MatchCount
                 };
 
                 gridItem.MatchItems = new ObservableCollection<MatchItem>();
@@ -388,22 +222,42 @@ namespace Leak_UI.ViewModel
                 GridData.Add(gridItem);
             }
         }
-
+        
+        // 모델과 작업지시서 데이터 바인딩
         private void OnBinding_BoxGrid(string data) {
             // 데이터를 처리하고 GridData를 수정하는 로직
             // 예시: GridData[0].TestMatch[0].MatchDataSerial = "TEST성공";
-            if (data == Model.ModelSerial ) { // T ModelData가 들어왔을때
-                GridData[Model.ScanCount].ModelSerial = data;
-                GridData[Model.ScanCount].Background = Brushes.Green;
-                
-                if (Model.MatchScanCount == Model.MatchCount) {
-                    Model.ScanCount++;
+            if (data == Model.ModelSerial) {
+                if (GridData[Model.ScanCount].ModelSerial == "") {
+                    GridData[Model.ScanCount].ModelSerial = data;
+                    GridData[Model.ScanCount].Background = Brushes.Green;
+
+                    if (Model.MatchScanCount == Model.MatchCount) {
+                        Model.ScanCount++;
+                    }
+
+                    if (Model.MatchCount < 1) {
+                        
+                    }
+
+                    if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
+                        AutoPrint();
+                        GridData.Clear();
+                        Model = new MainModel();
+                    }
+                } else {
+                    MessageBox.Show("매칭을 진행해 주세요");
                 }
-                if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
-                    LetsGoPrint();
-                }
-            } 
-            else if (data == Model.MmatchItems[Model.MatchScanCount] && GridData[Model.ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
+            } else {
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 위치 모델을 확인하세요.");
+            }
+        }
+
+        // 매칭아이템 바인딩
+        private void OnBinding_MatchGrid(string data) {
+            // 데이터를 처리하고 GridData를 수정하는 로직
+            // 예시: GridData[0].TestMatch[0].MatchDataSerial = "TEST성공";
+            if (data == Model.MmatchItems[Model.MatchScanCount] && GridData[Model.ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
                 GridData[Model.ScanCount].MatchItems[Model.MatchScanCount].MatchDataSerial = data;
                 GridData[Model.ScanCount].MatchItems[Model.MatchScanCount].MatchDataBackground = Brushes.Green;
                 Model.MatchScanCount++;
@@ -411,10 +265,8 @@ namespace Leak_UI.ViewModel
                 if (Model.MatchScanCount == Model.MatchCount) {
                     Model.ScanCount++;
                 }
-            } 
-            
-            else {
-                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 위치 모델을 확인하세요.");
+            } else {
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.MatchScanCount) + "번 위치 모델을 확인하세요.");
             }
 
         }
@@ -424,74 +276,6 @@ namespace Leak_UI.ViewModel
         }
         #endregion
         
-        #region Web I/O Method
-        // Input Text
-        void SendTextInput(IWebDriver driver, string elementId, string text) {
-            var element = driver.FindElement(By.Id(elementId));
-            element.SendKeys(text);
-
-            // 모델 번호가 정상적으로 들어왔을시 엔터로 조회 진행
-            if (text.StartsWith("99")) {
-                element.SendKeys(Keys.Enter);
-            }
-
-            // 포장 수량 입력시 엔터로 적용
-            if (elementId.Equals(Model.PACKAGED_QUANTITY)) {
-                element.SendKeys(Keys.Enter);
-                try {
-                    driver.SwitchTo().Alert().Accept();
-                } catch (Exception) {
-
-                }
-            }
-
-            // 발행 수량 입력 후 엔터로 출력 진행
-            if (elementId.Equals(Model.PRINT_QUANTITY)) {
-                element.SendKeys(Keys.Enter);
-                try {
-                    driver.SwitchTo().Alert().Accept();
-                } catch (Exception) {
-
-                }
-            }
-        }
-
-        // 요소 클릭 (ID 기반)
-        void ClickByBtn(IWebDriver driver, string elementId) {
-            var element = driver.FindElement(By.Id(elementId));
-            element.Click();
-
-        }
-
-        // 요소 클릭 (XPath 기반)
-        void ClickByXPath(IWebDriver driver, string xpath) {
-            var element = driver.FindElement(By.XPath(xpath));
-            element.Click();
-
-            if (xpath.Equals("//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]")) {
-                string eleDate = element.Text; // 라벨 발행 마지막 시간 string
-
-                // string => dateTime casting
-                CultureInfo culture = new CultureInfo("en-US");
-                DateTime webTimeData = Convert.ToDateTime(eleDate, culture);
-
-                // now dateTime
-                DateTime timeNow = DateTime.Now;
-                timeNow.ToString("yyyy//MM//dd HH:mm:ss");
-
-                // 현재 시간 - 발행 완료 시간 = 시간 차이
-                TimeSpan result = timeNow - webTimeData;
-                // 시간(초) 차이
-                int resultTest = result.Seconds;
-
-                // 
-                if (resultTest < 5) {
-                    Model.PrintProgress = "출력 완료 !";
-                }
-            }
-        }
-        #endregion
-
         #region Window State
 
         private WindowState _windowState;

@@ -23,8 +23,7 @@ namespace Leak_UI {
                 CaptionHeight = 0
             });
 
-            Style roundedWindowStyle = FindResource("RoundedWindowStyle") as Style;
-            if (roundedWindowStyle != null) {
+            if (FindResource("RoundedWindowStyle") is Style roundedWindowStyle) {
                 Style = roundedWindowStyle;
             }
         }

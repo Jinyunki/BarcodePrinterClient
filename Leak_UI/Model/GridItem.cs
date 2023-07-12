@@ -8,6 +8,17 @@ namespace Leak_UI.Model
     {
         public int Index { get; set; }
 
+        private int _gridRowSpan;
+        public int GridRowSpan {
+            get { return _gridRowSpan; }
+            set {
+                if (_gridRowSpan != value) {
+                    _gridRowSpan = value;
+                    OnPropertyChanged("GridRowSpan");
+                }
+            }
+        }
+
         private string _modelSerial;
         public string ModelSerial {
             get { return _modelSerial; }
