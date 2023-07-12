@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Background="#2E333A"
-        xmlns:Model="clr-namespace:Leak_UI.Model"
         WindowStyle="None" MouseDown="Window_MouseDown" WindowState="{Binding WindowState}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         Height="600" Width="1200" Loaded="Window_Loaded" AllowsTransparency="True">
@@ -325,7 +324,7 @@
         </Grid>
 
         <!--Box grid-->
-        <Grid Grid.Column="1" Grid.Row="1" Background="White" Margin="17" Opacity="0.2">
+        <Grid Grid.Column="1" Grid.Row="1" Margin="17" Background="White" Opacity="0.3">
             <ItemsControl ItemsSource="{Binding GridData}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -334,34 +333,53 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1">
-                            <Grid>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="2">
+                            <Grid Grid.Row="0" >
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="1*"/>
                                     <RowDefinition Height="1*"/>
                                     <RowDefinition Height="3*"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Grid.Row="0" Background="{Binding Background}"
-                                           Text="{Binding Index}"
-                                           FontSize="15"/>
 
-                                <TextBlock Grid.Row="1" Grid.RowSpan="{Binding GridRowSpan}" Background="{Binding Background}"
-                                           Text="{Binding ModelSerial}" 
-                                           FontSize="15"/>
-                                <ItemsControl Grid.Row="2" ItemsSource="{Binding MatchItem}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <UniformGrid Rows="{Binding Model.MatchCount}" Columns="1"/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border BorderBrush="Black" BorderThickness="1" Background="{Binding MatchBackground}">
-                                                <TextBlock Text="{Binding MatchModelSerial}" FontSize="15"/>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                <Grid Grid.Row="0" Background="{Binding Background}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Border Grid.Column="0" CornerRadius="25" Width="20" Height="20"
+                                            BorderThickness="1" BorderBrush="Black"
+                                            VerticalAlignment="Top" HorizontalAlignment="Left">
+                                        <TextBlock Text="{Binding Index}" FontSize="10"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <Grid Grid.Column="1" >
+                                        <TextBlock  Text="{Binding ModelSerial}"
+                                               FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                    </Grid>
+                                    
+                                </Grid>
+
+                                <Grid Grid.Row="1">
+                                    <ItemsControl ItemsSource="{Binding MatchItems}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Rows="{Binding Model.MatchCount}" Columns="1"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="Black" BorderThickness="0.5">
+                                                    <Grid Background="{Binding MatchDataBackground}">
+                                                        <TextBlock Text="{Binding MatchDataSerial}"
+                                                                   FontSize="15" HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                                    
                             </Grid>
                         </Border>
                     </DataTemplate>

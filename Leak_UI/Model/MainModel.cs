@@ -29,23 +29,16 @@ namespace Leak_UI.Model
 
         #endregion
         #region GridViewStyle
-        private List<MatchItemData> saveMatchItem = new List<MatchItemData>();
-        public List<MatchItemData> SaveMatchItem {
-            get { return saveMatchItem; }
-            set {
-                saveMatchItem = value;
-                RaisePropertyChanged(nameof(SaveMatchItem));
-            }
-        }
 
-        private List<string> matchData = new List<string>();
-        public List<string> MatchData {
-            get { return matchData; }
+        private List<string> _matchItems = new List<string>();
+        public List<string> MmatchItems {
+            get { return _matchItems; }
             set {
-                matchData = value;
-                RaisePropertyChanged(nameof(MatchData));
+                _matchItems = value;
+                RaisePropertyChanged(nameof(MmatchItems));
             }
         }
+        
         private int _matchCount = 0;
         public int MatchCount {
             get { return _matchCount; }
@@ -92,7 +85,7 @@ namespace Leak_UI.Model
             get { return labelType; }
             set {
                 labelType = value;
-                RaisePropertyChanged("BoxType");
+                RaisePropertyChanged("LabelType");
             }
         }
 
@@ -135,6 +128,19 @@ namespace Leak_UI.Model
             }
         }
 
+        // ModelScanCount
+        private int matchScanCount;
+        public int MatchScanCount {
+            get { return matchScanCount; }
+            set {
+                matchScanCount = value;
+                if (matchScanCount == MatchCount) {
+                    matchScanCount = 0;
+                    ScanCount++;
+                }
+                RaisePropertyChanged("MatchScanCount");
+            }
+        }
 
         // BoxSize
         private string boxSize = "1";

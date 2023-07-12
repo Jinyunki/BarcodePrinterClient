@@ -39,7 +39,7 @@ namespace Leak_UI.ViewModel
         private IDispatcher dispatcher;
 
         public MainViewModel(IDispatcher dispatcher) {
-            model = new Model.MainModel();
+            model = new MainModel();
             this.dispatcher = dispatcher;
             OpenSerialPort();
             BtnEvent();
@@ -50,17 +50,7 @@ namespace Leak_UI.ViewModel
         }
 
 
-        #region GridViewStyle
-        private ObservableCollection<GridItem> _gridData;
-        public ObservableCollection<GridItem> GridData {
-            get { return _gridData; }
-            set {
-                _gridData = value;
-                RaisePropertyChanged(nameof(GridData));
-            }
-        }
-
-        #endregion
+        
 
         #region ExcelDataRead
         private string ReadExcelData(string returnValue) {
@@ -76,6 +66,8 @@ namespace Leak_UI.ViewModel
                     string cellValue = worksheet.Cells[row, 1].Value?.ToString(); // A열 값 읽기 [ 품번 , ProductID ]
 
                     if (cellValue == Model.Product_ID) {
+
+                        returnValue = worksheet.Cells[row, 3].Value?.ToString();
                         Model.LabelType = worksheet.Cells[row, 3].Value?.ToString(); // C열 값 읽기 [ Label Type ]
 
                         string colunmStr = worksheet.Cells[row, 4].Value?.ToString(); // D열 값 읽기 [ 가로 박스 개수 ]
@@ -92,21 +84,13 @@ namespace Leak_UI.ViewModel
                         Model.MatchCount = Int32.Parse(matchNumberOfRows);
 
                         for (int i = 0; i < Model.MatchCount; i++) {
-                            Model.MatchData.Add(worksheet.Cells[row, i + 8].Value?.ToString());
-                            MatchItemData saveMatchItem = new MatchItemData();
-                            Model.SaveMatchItem.Add(saveMatchItem);
-                        }
-
-                        Console.WriteLine("ADD SUCCES , COUNT : " + Model.MatchData.Count);
-
-                        if (returnValue == Model.LabelType || returnValue == Model.ModelSerial || returnValue == Model.BoxColorString) {
-                            return returnValue;
+                            Model.MmatchItems.Add(worksheet.Cells[row, i + 8].Value?.ToString());
                         }
                     }
                 }
             }
 
-            return null; // 해당 데이터가 없는 경우 null 반환
+            return returnValue; // 해당 데이터가 없는 경우 null 반환
         }
         #endregion
         private void BtnEvent() {
@@ -302,7 +286,7 @@ namespace Leak_UI.ViewModel
                     Parity = Parity.None
                 };
 
-                serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived);
+                serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived_Test);
 
                 serialPort1.Open();
                 Model.ResultConnect = "포트 연결";
@@ -328,99 +312,118 @@ namespace Leak_UI.ViewModel
             }
         }
 
-        private void SerialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e) {
+        #region GridViewStyle
+        private ObservableCollection<GridItem> _gridData = new ObservableCollection<GridItem>();
+        public ObservableCollection<GridItem> GridData {
+            get { return _gridData; }
+            set {
+                _gridData = value;
+                RaisePropertyChanged(nameof(GridData));
+            }
+        }
+        //private ObservableCollection<GridItem> GridData = new ObservableCollection<GridItem>();
+
+        private ObservableCollection<MatchItem> _matchData = new ObservableCollection<MatchItem>();
+        public ObservableCollection<MatchItem> MatchData {
+            get { return _matchData; }
+            set {
+                _matchData = value;
+                RaisePropertyChanged(nameof(MatchData));
+            }
+        }
+
+        #endregion
+        #region 테스트 구간 07 11
+        private void SerialPort1_DataReceived_Test(object sender, SerialDataReceivedEventArgs e) {
             SerialPort sp = (SerialPort)sender;
             string indata = sp.ReadExisting();
             string[] indataModel = indata.Split('-');
             string resultData = indataModel[0];
 
-            dispatcher.Invoke(() => {
-                GridData = new ObservableCollection<GridItem>();
-                if (resultData.StartsWith("9")) {
-                    ReadingData(resultData);
-                } else if (resultData.StartsWith("T")) {
-                    AloneModelCounting(resultData);
+            dispatcher.Invoke(() =>
+            {
+                try {
+                    // 작업지시서 스캔 시 , 메인Grid를 생성한다.
+                    if (resultData.StartsWith("9")) {
+                        OnCreate_BoxGrid(resultData);
+                    } else if (resultData.StartsWith("T")) {
+                        OnBinding_BoxGrid(resultData);
+                    } else if (resultData.StartsWith("M")) {
+                        OnBinding_BoxGrid(resultData);
+                    }
+
+                    //AddGridItems_TEST();
+                    Model.BoxSize = GridData.Count.ToString();
+                } catch (Exception) {
+                    MessageBox.Show("작업지시서를 스캔해 주세요");
+                    return;
                 }
-                AddGridItems(resultData);
-                Model.BoxSize = GridData.Count.ToString();
+                
             });
         }
 
-        // ReadingExcelData
-        private void ReadingData(string resultData) {
-            Model.Product_ID = resultData;
+        private void OnCreate_BoxGrid(string data) {
+            // 데이터를 읽어와서 GridData에 추가 또는 수정하는 로직
+            // 예시: GridData.Add(new GridItem(data));
+            GridData.Clear();
+            Model.Product_ID = data;
             ReadExcelData(Model.LabelType);
-        }
 
-        // ModelCounting - 매칭없이 단독일때
-        private void AloneModelCounting(string resultData) {
-            if (Model.ModelSerial == resultData) {
-                    Model.ScanCount++;
-                //if (Model.MatchCount <= 0) {
-                //}
-                if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
-                    LetsGoPrint();
-                }
-            } else {
-                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 위치 모델을 확인하세요.");
-            }
-        }
-
-
-        // Grid Add
-        private void AddGridItems(string inpuSerial) {
             for (int i = 0; i < Model.NumberOfColumns * Model.NumberOfRows; i++) {
                 GridItem gridItem = new GridItem {
                     Index = i + 1,
                     ModelSerial = "",
-                    Background = Brushes.White,
-                    MatchItem = new List<MatchItemData>(),
-                    GridRowSpan = 2
+                    Background = Brushes.White
                 };
 
-                if (i < Model.ScanCount) {
-                    gridItem.Background = Brushes.Green;
-                    gridItem.ModelSerial = Model.ModelSerial;
-
-                    if (Model.MatchCount > 0) {
-                        AddMatchItems(gridItem, inpuSerial);
-                    }
+                gridItem.MatchItems = new ObservableCollection<MatchItem>();
+                for (int j = 0; j < Model.MatchCount; j++) {
+                    MatchItem matchItem = new MatchItem {
+                        MatchDataSerial = "",
+                        MatchDataBackground = Brushes.White
+                    };
+                    gridItem.MatchItems.Add(matchItem);
                 }
 
                 GridData.Add(gridItem);
             }
         }
 
-        private void AddMatchItems(GridItem gridItem, string inpuSerial) {
-            for (int j = 0; j < Model.MatchCount; j++) {
-                MatchItemData matchItem = new MatchItemData {
-                    MatchModelSerial = "TEST",
-                    MatchBackground = Brushes.White
-                };
-
-                if (j < Model.MatchData.Count) {
-                    if (Model.MatchData[j] == inpuSerial && inpuSerial.StartsWith("M")) {
-                        matchItem.MatchModelSerial = inpuSerial;
-                        matchItem.MatchBackground = Brushes.Green;
-
-                        Model.SaveMatchItem[j].MatchModelSerial = inpuSerial;
-                        Model.SaveMatchItem[j].MatchBackground = Brushes.Green;
-                    }
+        private void OnBinding_BoxGrid(string data) {
+            // 데이터를 처리하고 GridData를 수정하는 로직
+            // 예시: GridData[0].TestMatch[0].MatchDataSerial = "TEST성공";
+            if (data == Model.ModelSerial ) { // T ModelData가 들어왔을때
+                GridData[Model.ScanCount].ModelSerial = data;
+                GridData[Model.ScanCount].Background = Brushes.Green;
+                
+                if (Model.MatchScanCount == Model.MatchCount) {
+                    Model.ScanCount++;
                 }
-
-                // Get the existing match item data from the Model if it exists
-                if (j < Model.SaveMatchItem.Count) {
-                    matchItem.MatchModelSerial = Model.SaveMatchItem[j].MatchModelSerial;
-                    matchItem.MatchBackground = Model.SaveMatchItem[j].MatchBackground;
+                if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
+                    LetsGoPrint();
                 }
+            } 
+            else if (data == Model.MmatchItems[Model.MatchScanCount] && GridData[Model.ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
+                GridData[Model.ScanCount].MatchItems[Model.MatchScanCount].MatchDataSerial = data;
+                GridData[Model.ScanCount].MatchItems[Model.MatchScanCount].MatchDataBackground = Brushes.Green;
+                Model.MatchScanCount++;
 
-                gridItem.MatchItem.Add(matchItem);
+                if (Model.MatchScanCount == Model.MatchCount) {
+                    Model.ScanCount++;
+                }
+            } 
+            
+            else {
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 위치 모델을 확인하세요.");
             }
+
         }
 
-
-
-
+        private void AddGridItems_TEST() {
+            // GridData에 대한 추가 작업
+        }
+        #endregion
+        
         #region Web I/O Method
         // Input Text
         void SendTextInput(IWebDriver driver, string elementId, string text) {
