@@ -23,41 +23,42 @@ namespace Leak_UI.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
-        private static global::System.Resources.ResourceManager resourceMan;
-        
-        private static global::System.Globalization.CultureInfo resourceCulture;
-        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
-        /// <summary>
-        ///   이 클래스에서 사용하는 캐시된 ResourceManager 인스턴스를 반환합니다.
-        /// </summary>
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
-            get {
-                if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Leak_UI.Properties.Resources", typeof(Resources).Assembly);
-                    resourceMan = temp;
-                }
-                return resourceMan;
-            }
-        }
-        
-        /// <summary>
-        ///   이 강력한 형식의 리소스 클래스를 사용하여 모든 리소스 조회에 대해 현재 스레드의 CurrentUICulture 속성을
-        ///   재정의합니다.
-        /// </summary>
-        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
-            get {
-                return resourceCulture;
-            }
-            set {
-                resourceCulture = value;
-            }
-        }
+
+        #region 23-07-13 부로 생겼길래 모두 주석처리함 
+        //private static global::System.Resources.ResourceManager resourceMan;
+
+        //private static global::System.Globalization.CultureInfo resourceCulture;
+
+        ///// <summary>
+        /////   이 클래스에서 사용하는 캐시된 ResourceManager 인스턴스를 반환합니다.
+        ///// </summary>
+        //[global::System.Component EditorBrowsableAttribute(global::System.Component EditorBrowsableState.Advanced)]
+        //internal static global::System.Resources.ResourceManager ResourceManager {
+        //    get {
+        //        if (object.ReferenceEquals(resourceMan, null)) {
+        //            global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Leak_UI.Properties.Resources", typeof(Resources).Assembly);
+        //            resourceMan = temp;
+        //        }
+        //        return resourceMan;
+        //    }
+        //}
+
+        ///// <summary>
+        /////   이 강력한 형식의 리소스 클래스를 사용하여 모든 리소스 조회에 대해 현재 스레드의 CurrentUICulture 속성을
+        /////   재정의합니다.
+        ///// </summary>
+        //[global::System.Component EditorBrowsableAttribute(global::System.Component EditorBrowsableState.Advanced)]
+        //internal static global::System.Globalization.CultureInfo Culture {
+        //    get {
+        //        return resourceCulture;
+        //    }
+        //    set {
+        //        resourceCulture = value;
+        //    }
+        //}
+        #endregion
     }
 }

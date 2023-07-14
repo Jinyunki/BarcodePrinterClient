@@ -5,29 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:Leak_UI.View"
         mc:Ignorable="d" Background="#2E333A"
+        xmlns:vm ="clr-namespace:Leak_UI.ViewModel"
         WindowStyle="None" MouseDown="Window_MouseDown" WindowState="{Binding WindowState}"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        Height="600" Width="1270" Loaded="Window_Loaded" AllowsTransparency="True">
+        Height="900" Width="1600" Loaded="Window_Loaded" AllowsTransparency="True">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="GUI_Design_Dictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type vm:MainProgramViewModel}">
+                <view:MainProgramView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ExcelRecipeViewModel}">
+                <view:ExcelRecipeView/>
+            </DataTemplate>
+
+
         </ResourceDictionary>
     </Window.Resources>
 
     <!--basic window-->
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="70"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        
+
         <!--Header - Top WindowBtn-->
         <Grid x:Name="TopTab" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
@@ -49,18 +56,19 @@
         <!--Body-->
         <Grid Grid.Row="1" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="93*"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             
             <!--SideMenuTab-->
-            <Grid Grid.Column="0" >
-                <view:SideMenuTab />
+            <Grid Grid.Column="0" Margin="0 10 0 10">
+                <view:SideMenuTab/>
             </Grid>
-            
 
             <Grid Grid.Column="1">
-                <view:BodyView />
+                <ContentControl Content="{Binding CurrentViewModel, 
+                        UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </Grid>
         

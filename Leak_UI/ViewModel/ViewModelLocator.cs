@@ -13,12 +13,8 @@
 */
 
 using CommonServiceLocator;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
-using Leak_UI.Model;
 using Leak_UI.Utiles;
-using System.Runtime.InteropServices;
-using System.Windows.Threading;
 
 namespace Leak_UI.ViewModel
 {
@@ -38,11 +34,23 @@ namespace Leak_UI.ViewModel
             SimpleIoc.Default.Register<IDispatcher, DispatcherWrapper>();
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<MainProgramViewModel>();
+            SimpleIoc.Default.Register<ExcelRecipeViewModel>();
         }
 
         public MainViewModel Main {
             get {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+        public MainProgramViewModel MainProgramViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<MainProgramViewModel>();
+            }
+        }
+        public ExcelRecipeViewModel ExcelRecipeViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<ExcelRecipeViewModel>();
             }
         }
 

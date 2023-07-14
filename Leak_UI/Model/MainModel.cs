@@ -9,6 +9,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Globalization;
 using System.Threading;
+using System.ComponentModel;
 
 namespace Leak_UI.Model
 {
@@ -31,9 +32,10 @@ namespace Leak_UI.Model
 
         public string PRINT_SUCCESSCHECK = "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]";
 
-        public string PATH = Path.Combine(@"D:\JinYunki\Leak_UI2\Leak_UI\bin\Release", "LabelConfig.xlsx");
+        public static string PATH = Path.Combine(@"D:\JinYunki\Leak_UI2\Leak_UI\bin\Release", "LabelConfig.xlsx");
 
         #endregion
+
         #region GridViewStyle
 
         private List<string> _matchItems = new List<string>();
@@ -177,7 +179,7 @@ namespace Leak_UI.Model
             }
         }
         // Box Color 
-        private Brush boxColor = Brushes.Black;
+        private Brush boxColor;
         public string BoxColorString {
             get { return boxColor.ToString(); }
             set {
@@ -197,6 +199,8 @@ namespace Leak_UI.Model
         }
         public ICommand BtnPrintCommand { get; set; }
         public ICommand BtnPortConnectCommand { get; set; }
+        public ICommand btMainHome { get; set; }
+        public ICommand btExcel { get; set; }
         #endregion
 
         #region ExcelDataRead
@@ -243,10 +247,7 @@ namespace Leak_UI.Model
         #endregion
 
         #region WebCrolling
-        private ChromeDriverService driverService;
-        private ChromeOptions options;
-        private ChromeDriver driver;
-
+        
         public void Login(ChromeDriver driver) {
             SendTextInput(driver, "txtUserID", id);
             Thread.Sleep(200);
@@ -371,6 +372,11 @@ namespace Leak_UI.Model
             }
         }
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
 }

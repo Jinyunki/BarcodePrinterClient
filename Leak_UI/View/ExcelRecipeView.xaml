@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="Leak_UI.View.ExcelRecipeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" Background="#FF1D1D1D"
+             xmlns:local="clr-namespace:Leak_UI.View"
+             xmlns:utiles="clr-namespace:Leak_UI.Utiles"
+             DataContext="{Binding ExcelRecipeViewModel, Source={StaticResource Locator}}"
+             d:DesignHeight="600" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="D:\JinYunki\Leak_UI2\Leak_UI\GUI_Design_Dictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid ItemsSource="{Binding ExcelData}" AutoGenerateColumns="False"
+                  CellEditEnding="DataGrid_CellEditEnding" Background="#FF1D1D1D"
+                  Style="{StaticResource DataGridStyle}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="작업 지시서" 
+                                    Binding="{Binding [0]}" Width="1*"/>
+                <DataGridTextColumn Header="모델 명" 
+                                    Binding="{Binding [1]}" Width="1.5*"/>
+                <DataGridTextColumn Header="라벨" 
+                                    Binding="{Binding [2]}" Width="0.8*"/>
+                <DataGridTextColumn Header="BOX 가로" 
+                                    Binding="{Binding [3]}" Width="0.7*"/>
+                <DataGridTextColumn Header="BOX 세로" 
+                                    Binding="{Binding [4]}" Width="0.7*"/>
+                <DataGridTextColumn Header="제품 코드" 
+                                    Binding="{Binding [5]}" Width="1*"/>
+                <DataGridTextColumn Header="BOX 컬러" 
+                                    Binding="{Binding [6]}" Width="0.7*"/>
+                <DataGridTextColumn Header="Mat1" 
+                                    Binding="{Binding [7]}" Width="*"/>
+                <DataGridTextColumn Header="Mat2" 
+                                    Binding="{Binding [8]}" Width="*"/>
+                <DataGridTextColumn Header="Mat3" 
+                                    Binding="{Binding [9]}" Width="*"/>
+                <DataGridTextColumn Header="Total"
+                                    Binding="{Binding [10]}" Width="0.5*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
