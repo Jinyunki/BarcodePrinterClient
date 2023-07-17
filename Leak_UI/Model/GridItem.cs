@@ -1,13 +1,19 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.ComponentModel;
+using System;
 
 namespace Leak_UI.Model
 {
-    public class GridItem : INotifyPropertyChanged
-    {
-        public int Index { get; set; }
-
+    public class GridItem : INotifyPropertyChanged {
+        private int _index;
+        public int Index {
+            get { return _index; }
+            set {
+                _index = value;
+                OnPropertyChanged("Index");
+            }
+        }
         private int _gridRowSpan;
         public int GridRowSpan {
             get { return _gridRowSpan; }
@@ -15,6 +21,16 @@ namespace Leak_UI.Model
                 if (_gridRowSpan != value) {
                     _gridRowSpan = value;
                     OnPropertyChanged("GridRowSpan");
+                }
+            }
+        }
+        private int _matchGridRowSpan;
+        public int MatchGridRowSpan {
+            get { return _matchGridRowSpan; }
+            set {
+                if (_matchGridRowSpan != value) {
+                    _matchGridRowSpan = value;
+                    OnPropertyChanged("MatchGridRowSpan");
                 }
             }
         }

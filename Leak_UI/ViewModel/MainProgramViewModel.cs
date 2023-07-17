@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
 using Leak_UI.Utiles;
-using OpenQA.Selenium.Chrome;
 using System;
 using System.IO.Ports;
 using OfficeOpenXml;
@@ -10,105 +9,52 @@ using LicenseContext = OfficeOpenXml.LicenseContext;
 using System.Windows;
 using Brushes = System.Windows.Media.Brushes;
 using Leak_UI.Model;
+using System.Windows.Input;
 
 namespace Leak_UI.ViewModel
 {
     public class MainProgramViewModel : ViewModelBase
     {
         private SerialPort serialPort1;
-        private ChromeDriverService driverService;
-        private ChromeOptions options;
-        private ChromeDriver driver;
         private IDispatcher dispatcher;
+
+        // 웹크롤링
+        private WebCrowling _webCrowling = new WebCrowling();
+        public WebCrowling WebCrowling {
+            get { return _webCrowling; }
+            set { _webCrowling = value; RaisePropertyChanged(nameof(WebCrowling)); }
+        }
 
         private MainModel model = null;
         public MainModel Model {
             get { return model; }
-            set { model = value; RaisePropertyChanged("Model"); }
+            set { model = value; RaisePropertyChanged(nameof(Model)); }
         }
 
         public MainProgramViewModel(IDispatcher dispatcher) {
-            model = new MainModel();
+            _webCrowling = new WebCrowling();
             this.dispatcher = dispatcher;
             OpenSerialPort();
             BtnEvent();
-            //WinBtnEvent();
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
         }
+        public ICommand BtnPrintCommand { get; set; }
+        public ICommand BtnPortConnectCommand { get; set; }
         private void BtnEvent() {
-            Model.BtnPortConnectCommand = new Command(BtnPortConnect_Click, CanExCute);
-            Model.BtnPrintCommand = new Command(BtnPrint_Click, CanExCute);
+            BtnPortConnectCommand = new Command(BtnPortConnect_Click, CanExCute);
+            BtnPrintCommand = new Command(BtnPrint_Click, CanExCute);
         }
         private bool CanExCute(object obj) {
             return true;
         }
         #region 크롤링
         private void BtnPrint_Click(object obj) {
-            Model.PrintProgress = "출력 시작";
-            driverService = ChromeDriverService.CreateDefaultService();
-
-            // 크롤링 드라이버 CMD창 Hide
-            driverService.HideCommandPromptWindow = true;
-
-            options = new ChromeOptions();
-
-            // 크롤링 GPU 가속화 Off
-            options.AddArgument("disable-gpu");
-
-            // 크롤링 웹 View Background 처리
-            //options.AddArgument("--headless");
-            //options.AddArgument("ignore-certificate-errors");
-
-            driver = new ChromeDriver(driverService, options);
-
-            driver.Navigate().GoToUrl(Model.webUri);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
-
-            Model.Login(driver);
-
-            Model.SelectLabel(driver);
-
-            Model.InputProductInfo(driver);
-
-            Model.VerifyPrintData(driver);
-
-            GridData.Clear();
-            Model = new MainModel();
-        }
-        private void AutoPrint() {
-            Model.PrintProgress = "출력 시작";
-            driverService = ChromeDriverService.CreateDefaultService();
-
-            // 크롤링 드라이버 CMD창 Hide
-            driverService.HideCommandPromptWindow = true;
-
-            options = new ChromeOptions();
-
-            // 크롤링 GPU 가속화 Off
-            options.AddArgument("disable-gpu");
-
-            // 크롤링 웹 View Background 처리
-            //options.AddArgument("--headless");
-            //options.AddArgument("ignore-certificate-errors");
-
-            driver = new ChromeDriver(driverService, options);
-
-            driver.Navigate().GoToUrl(Model.webUri);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
-
-            Model.Login(driver);
-
-            Model.SelectLabel(driver);
-
-            Model.InputProductInfo(driver);
-
-            Model.VerifyPrintData(driver);
+            WebCrowling.GetPrint();
         }
         #endregion
-
+        
         private void OpenSerialPort() {
-
             try {
                 if (serialPort1 != null && serialPort1.IsOpen) {
                     serialPort1.Close();
@@ -126,9 +72,9 @@ namespace Leak_UI.ViewModel
                 serialPort1.DataReceived += new SerialDataReceivedEventHandler(SerialPort1_DataReceived);
 
                 serialPort1.Open();
-                Model.ResultConnect = "포트 연결";
+                WebCrowling.ResultConnect = "포트 연결";
             } catch (UnauthorizedAccessException ex) {
-                Model.ResultConnect = "액세스 거부: " + ex.Message;
+                WebCrowling.ResultConnect = "액세스 거부: " + ex.Message;
                 Console.WriteLine("액세스 거부: " + ex.Message);
                 // 포트 액세스 거부 예외 처리
                 // 포트를 닫고 다시 열어보세요.
@@ -136,7 +82,7 @@ namespace Leak_UI.ViewModel
                 serialPort1?.Dispose();
                 OpenSerialPort(); // 재귀적으로 메서드 호출
             } catch (Exception ex) {
-                Model.ResultConnect = "연결 오류: " + ex.Message;
+                WebCrowling.ResultConnect = "연결 오류: " + ex.Message;
                 Console.WriteLine("연결 오류: " + ex.Message);
             }
         }
@@ -145,10 +91,9 @@ namespace Leak_UI.ViewModel
             if (serialPort1 != null && serialPort1.IsOpen) {  // 이미 포트가 열려 있는 경우
                 serialPort1.Close();  // 포트 닫기
                 serialPort1.Dispose();
-                Model.ResultConnect = "연결 종료";
+                WebCrowling.ResultConnect = "연결 종료";
             }
         }
-
         #region GridViewStyle
         private ObservableCollection<GridItem> _gridData = new ObservableCollection<GridItem>();
         public ObservableCollection<GridItem> GridData {
@@ -175,13 +120,12 @@ namespace Leak_UI.ViewModel
                         // 모델인식,작업지시서 매칭여부, 해당모델의 매칭데이터 여부
                     } else if (resultData.StartsWith("T")) {
                         OnBinding_BoxGrid(resultData);
-                        // 매칭아이템의 매칭 여부 체크
+                        // 매칭 데이터 바인딩
                     } else if (resultData.StartsWith("M")) {
                         OnBinding_MatchGrid(resultData);
                     }
-
                     //AddGridItems_TEST();
-                    Model.BoxSize = GridData.Count.ToString();
+                    WebCrowling.BoxSize = GridData.Count.ToString();
                 } catch (Exception) {
                     MessageBox.Show("작업지시서를 스캔해 주세요");
                     return;
@@ -189,25 +133,29 @@ namespace Leak_UI.ViewModel
 
             });
         }
+
+
         // 최초 그리드 생성, 엑셀 데이터 리딩
         private void OnCreate_BoxGrid(string data) {
             // 데이터를 읽어와서 GridData에 추가 또는 수정하는 로직
             // 예시: GridData.Add(new GridItem(data));
-            Model.ScanCount = 0;
+            WebCrowling = new WebCrowling();
+            WebCrowling.ScanCount = 0;
             GridData.Clear();
-            Model.Product_ID = data;
-            Model.ReadExcelData();
+            WebCrowling.Product_ID = data;
+            WebCrowling.ReadExcelData();
 
-            for (int i = 0; i < Model.NumberOfColumns * Model.NumberOfRows; i++) {
+            for (int i = 0; i < WebCrowling.NumberOfColumns * WebCrowling.NumberOfRows; i++) {
                 GridItem gridItem = new GridItem {
                     Index = i + 1,
                     ModelSerial = "",
                     Background = Brushes.Black,
-                    GridRowSpan = 4 - Model.MatchCount
+                    GridRowSpan = 4 - WebCrowling.MatchCount,
+                    MatchGridRowSpan = WebCrowling.MatchCount
                 };
 
                 gridItem.MatchItems = new ObservableCollection<MatchItem>();
-                for (int j = 0; j < Model.MatchCount; j++) {
+                for (int j = 0; j < WebCrowling.MatchCount; j++) {
                     MatchItem matchItem = new MatchItem {
                         MatchDataSerial = "",
                         MatchDataBackground = Brushes.Black
@@ -223,29 +171,26 @@ namespace Leak_UI.ViewModel
         private void OnBinding_BoxGrid(string data) {
             // 데이터를 처리하고 GridData를 수정하는 로직
             // 예시: GridData[0].TestMatch[0].MatchDataSerial = "TEST성공";
-            if (data == Model.ModelSerial) {
-                if (GridData[Model.ScanCount].ModelSerial == "") {
-                    GridData[Model.ScanCount].ModelSerial = "제품 : " + data;
-                    GridData[Model.ScanCount].Background = Brushes.Green;
+            if (data == WebCrowling.ModelSerial) {
+                if (GridData[WebCrowling.ScanCount].ModelSerial == "") {
+                    GridData[WebCrowling.ScanCount].ModelSerial = "제품 : " + data;
+                    GridData[WebCrowling.ScanCount].Background = Brushes.Green;
 
-                    if (Model.MatchScanCount == Model.MatchCount) {
-                        Model.ScanCount++;
+                    if (WebCrowling.MatchScanCount == WebCrowling.MatchCount) {
+                        WebCrowling.ScanCount++;
                     }
-
-                    if (Model.MatchCount < 1) {
-
-                    }
-
-                    if (Model.ScanCount > 0 && Model.ScanCount.ToString() == Model.BoxSize) {
-                        AutoPrint();
+                    // 매칭 카운트가 2개 이상이고 , 스캔카운트가 0이 아니고, 스캔횟수가 박스사이즈에 도달했을때
+                    if (WebCrowling.MatchCount > 1 &&WebCrowling.ScanCount > 0 && WebCrowling.ScanCount.ToString() == WebCrowling.BoxSize) {
+                        WebCrowling.GetPrint();
                         GridData.Clear();
-                        Model = new MainModel();
+                        WebCrowling = new WebCrowling();
                     }
+
                 } else {
                     MessageBox.Show("매칭을 진행해 주세요");
                 }
             } else {
-                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.ScanCount + 1) + "번 위치 모델을 확인하세요.");
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (WebCrowling.ScanCount + 1) + "번 위치 모델을 확인하세요.");
             }
         }
 
@@ -253,16 +198,22 @@ namespace Leak_UI.ViewModel
         private void OnBinding_MatchGrid(string data) {
             // 데이터를 처리하고 GridData를 수정하는 로직
             // 예시: GridData[0].TestMatch[0].MatchDataSerial = "TEST성공";
-            if (data == Model.MmatchItems[Model.MatchScanCount] && GridData[Model.ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
-                GridData[Model.ScanCount].MatchItems[Model.MatchScanCount].MatchDataSerial = "매칭 : " + data;
-                GridData[Model.ScanCount].MatchItems[Model.MatchScanCount].MatchDataBackground = Brushes.Green;
-                Model.MatchScanCount++;
+            if (data == WebCrowling.MmatchItems[WebCrowling.MatchScanCount] && GridData[WebCrowling.ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
+                GridData[WebCrowling.ScanCount].MatchItems[WebCrowling.MatchScanCount].MatchDataSerial = "매칭 : " + data;
+                GridData[WebCrowling.ScanCount].MatchItems[WebCrowling.MatchScanCount].MatchDataBackground = Brushes.Green;
+                WebCrowling.MatchScanCount++;
 
-                if (Model.MatchScanCount == Model.MatchCount) {
-                    Model.ScanCount++;
+                if (WebCrowling.MatchScanCount == WebCrowling.MatchCount) {
+                    WebCrowling.ScanCount++;
+                }
+                // 매칭카운트 개수와 상관없이, 마지막("M") 매칭 후 스캔 카운트가 도달했을때
+                if (WebCrowling.ScanCount.ToString() == WebCrowling.BoxSize) {
+                    WebCrowling.GetPrint();
+                    GridData.Clear();
+                    WebCrowling = new WebCrowling();
                 }
             } else {
-                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (Model.MatchScanCount) + "번 위치 모델을 확인하세요.");
+                MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (WebCrowling.MatchScanCount) + "번 위치 모델을 확인하세요.");
             }
 
         }

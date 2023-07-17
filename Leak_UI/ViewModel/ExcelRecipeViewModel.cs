@@ -1,35 +1,39 @@
-﻿using OfficeOpenXml;
+﻿using Leak_UI.Model;
+using OfficeOpenXml;
 using System.Collections.Generic;
 using System.IO;
-using Leak_UI.Model;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using GalaSoft.MvvmLight;
 
 namespace Leak_UI.ViewModel
 {
-    public class ExcelRecipeViewModel : MainModel
+    public class ExcelRecipeViewModel : ViewModelBase
     {
-
         public ExcelRecipeViewModel() {
             LoadExcelData();
+            
         }
+
+        #region LoadExcelData
+
         private ObservableCollection<List<object>> _excelData;
         public ObservableCollection<List<object>> ExcelData {
             get { return _excelData; }
             set {
                 _excelData = value;
                 OnPropertyChanged(nameof(ExcelData));
+                // 업데이트 트리거
                 UpdateExcelFile();
-
             }
         }
-        
-        public void LoadExcelData() {
-            // Excel 파일 경로
 
-            using (ExcelPackage package = new ExcelPackage(new FileInfo(PATH))) {
+        /// 엑셀 데이터를 불러오는곳
+        public ObservableCollection<List<object>> LoadExcelData() {
+            using (ExcelPackage package = new ExcelPackage(new FileInfo(WebCrowling.PATH))) {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                 int rowCount = worksheet.Dimension.Rows;
-                int columnCount = worksheet.Dimension.Columns;
+                int columnCount = worksheet.Dimension.Columns-1;
 
                 List<List<object>> dataList = new List<List<object>>();
 
@@ -38,7 +42,7 @@ namespace Leak_UI.ViewModel
 
                     for (int column = 1; column <= columnCount; column++) {
                         object cellValue = worksheet.Cells[row, column].Value;
-                        rowData.Add(cellValue ?? "-");
+                        rowData.Add(cellValue);
                     }
 
                     dataList.Add(rowData);
@@ -46,16 +50,18 @@ namespace Leak_UI.ViewModel
 
                 ExcelData = new ObservableCollection<List<object>>(dataList);
             }
+
+            return ExcelData;
         }
-        
-        // 엑셀 레시피 데이터 업데이트 메서드
+
+        /// 엑셀 데이터 업데이트
         public void UpdateExcelFile() {
-            FileInfo fileInfo = new FileInfo(PATH);
+            FileInfo fileInfo = new FileInfo(WebCrowling.PATH);
 
             using (ExcelPackage package = new ExcelPackage(fileInfo)) {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
                 int rows = worksheet.Dimension.Rows;
-                int columns = worksheet.Dimension.Columns;
+                int columns = worksheet.Dimension.Columns-1;
 
                 // Excel 데이터를 수정된 데이터로 업데이트
                 for (int row = 2; row <= rows; row++) {
@@ -67,6 +73,12 @@ namespace Leak_UI.ViewModel
 
                 package.Save();
             }
+        }
+        #endregion
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

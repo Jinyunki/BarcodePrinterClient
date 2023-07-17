@@ -123,15 +123,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\ExcelItems.cs" />
     <Compile Include="Model\GridItem.cs" />
     <Compile Include="Model\MainModel.cs" />
     <Compile Include="Model\MatchItem.cs" />
+    <Compile Include="Model\WebCrowling.cs" />
     <Compile Include="Utiles\CircularProgressBar.cs" />
     <Compile Include="Utiles\ColorConverter.cs" />
     <Compile Include="Utiles\Command.cs" />
     <Compile Include="Utiles\IDispatcher.cs" />
-    <Compile Include="ViewModel\Body_HomeViewModel.cs" />
+    <Compile Include="ViewModel\MainProgramViewModel.cs" />
     <Compile Include="ViewModel\ExcelRecipeViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SideMenu_ViewModel.cs" />

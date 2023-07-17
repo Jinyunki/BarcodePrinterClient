@@ -40,8 +40,6 @@
                                     Binding="{Binding [8]}" Width="*"/>
                 <DataGridTextColumn Header="Mat3" 
                                     Binding="{Binding [9]}" Width="*"/>
-                <DataGridTextColumn Header="Total"
-                                    Binding="{Binding [10]}" Width="0.5*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
