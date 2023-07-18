@@ -15,12 +15,16 @@
                 <ResourceDictionary Source="GUI_Design_Dictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type vm:MainProgramViewModel}">
-                <view:MainProgramView/>
+            <DataTemplate DataType="{x:Type vm:Main_MatchingViewModel}">
+                <view:Main_MatchingView/>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type vm:ExcelRecipeViewModel}">
+            <DataTemplate DataType="{x:Type vm:ExcelRecipe_ViewModel}">
                 <view:ExcelRecipeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ReissueListViewModel}">
+                <view:ReissueList/>
             </DataTemplate>
 
 

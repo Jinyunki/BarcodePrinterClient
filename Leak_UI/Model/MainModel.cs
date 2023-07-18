@@ -8,6 +8,7 @@ namespace Leak_UI.Model
     {
         public ICommand btMainHome { get; set; }
         public ICommand btExcel { get; set; }
+        public ICommand btData { get; set; }
         
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName) {

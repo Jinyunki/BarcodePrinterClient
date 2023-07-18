@@ -27,7 +27,7 @@ namespace Leak_UI.ViewModel
 
         #endregion
         public MainViewModel() {
-            CurrentViewModel = _locator.MainProgramViewModel;
+            CurrentViewModel = _locator.Main_MatchingViewModel;
             WinBtnEvent();
             BtnEvent();
         }
@@ -35,14 +35,17 @@ namespace Leak_UI.ViewModel
         private void BtnEvent() {
             btMainHome = new Command(btMainHomeCute, CanExCute);
             btExcel = new Command(btExcelCute, CanExCute);
+            btData = new Command(btDataCute, CanExCute);
         }
-
+        private void btDataCute(object obj) {
+            CurrentViewModel = _locator.ReissueListViewModel;
+        }
         private void btExcelCute(object obj) {
-            CurrentViewModel = _locator.ExcelRecipeViewModel;
+            CurrentViewModel = _locator.ExcelRecipe_ViewModel;
         }
 
         private void btMainHomeCute(object obj) {
-            CurrentViewModel = _locator.MainProgramViewModel;
+            CurrentViewModel = _locator.Main_MatchingViewModel;
         }
         private bool CanExCute(object obj) {
             return true;

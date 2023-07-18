@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace Leak_UI.Model
 {
-    public class MatchItem : INotifyPropertyChanged
+    public class Main_GridItem_MatchItem : INotifyPropertyChanged
     {
         private string _matchDataSerial;
         public string MatchDataSerial {

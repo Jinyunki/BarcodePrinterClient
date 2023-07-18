@@ -8,12 +8,13 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Globalization;
 using System.Threading;
-using System.Windows;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Leak_UI.Model
 {
-    public class WebCrowling : ViewModelBase
+    public class Main_Crowling : ViewModelBase
     {
         private ChromeDriverService driverService;
         private ChromeOptions options;
@@ -36,6 +37,8 @@ namespace Leak_UI.Model
         public string PRINT_SUCCESSCHECK = "//*[@id='ContentPlaceHolder1_dxGrid2_DXDataRow0']/td[1]";
 
         public static string PATH = Path.Combine(@"D:\JinYunki\Leak_UI2\Leak_UI\bin\Release", "LabelConfig.xlsx");
+
+        public string DATALIST_BODY = "//*[@id='ContentPlaceHolder1_dxGrid2_DXMainTable']";
 
         private List<string> _matchItems = new List<string>();
         public List<string> MmatchItems {
@@ -89,6 +92,15 @@ namespace Leak_UI.Model
             set {
                 product_ID = value;
                 RaisePropertyChanged("Product_ID");
+            }
+        }
+        // 재발행 검색 품번 입력
+        private string searchProduct_ID = "99240AA600";
+        public string SearchProduct_ID {
+            get { return searchProduct_ID; }
+            set {
+                searchProduct_ID = value;
+                RaisePropertyChanged("SearchProduct_ID");
             }
         }
         // ModelScanCount
@@ -179,10 +191,19 @@ namespace Leak_UI.Model
                 RaisePropertyChanged("ResultConnect");
             }
         }
+
+        private bool _printSuccese = false;
+        public bool PrintSuccese {
+            get { return _printSuccese; }
+            set {
+                _printSuccese = value;
+                RaisePropertyChanged("PrintSuccese");
+            }
+        }
         #endregion
 
         #region ExcelDataRead
-        public void ReadExcelData() {
+        public void ReadExcelData(string inputData) {
             FileInfo fileInfo = new FileInfo(PATH);
 
             using (ExcelPackage package = new ExcelPackage(fileInfo)) {
@@ -194,7 +215,7 @@ namespace Leak_UI.Model
                 for (int row = 1; row <= rows; row++) {
                     string cellValue = worksheet.Cells[row, 1].Value?.ToString(); // A열 값 읽기 [ 품번 , ProductID ]
 
-                    if (cellValue == Product_ID) {
+                    if (cellValue == inputData) {
                         LabelType = worksheet.Cells[row, 3].Value?.ToString(); // C열 값 읽기 [ Label Type ]
 
                         string colunmStr = worksheet.Cells[row, 4].Value?.ToString(); // D열 값 읽기 [ 가로 박스 개수 ]
@@ -252,6 +273,37 @@ namespace Leak_UI.Model
             SelectLabel(driver);
             InputProductInfo(driver);
             VerifyPrintData(driver);
+            //LoadDataListAdd(driver);
+            PrintSuccese = true;
+        }
+
+        public void GetWebDataRead(string inputProductID) {
+            driverService = ChromeDriverService.CreateDefaultService();
+
+            // 크롤링 드라이버 CMD창 Hide
+            driverService.HideCommandPromptWindow = true;
+
+            options = new ChromeOptions();
+
+            // 크롤링 GPU 가속화 Off
+            options.AddArgument("disable-gpu");
+
+            // 크롤링 웹 View Background 처리
+            //options.AddArgument("--headless");
+            //options.AddArgument("ignore-certificate-errors");
+
+            driver = new ChromeDriver(driverService, options);
+
+            driver.Navigate().GoToUrl(webUri);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+
+            Login(driver);
+            // 부품식별표 > 라벨선택기능 추가필요 ( 입력될 품번을 기준으로 레시피에서 참고하여 업데이트해야함 )
+            ReadExcelData(inputProductID);
+            SelectLabel(driver);
+            // 고객품번 입력후 엔터 기능 추가필요
+            SendTextInput(driver, MODEL_PRODUCT_ID, inputProductID);
+            LoadDataListAdd(driver);
         }
         #region WebCrowling
 
@@ -309,6 +361,12 @@ namespace Leak_UI.Model
         public void VerifyPrintData(ChromeDriver driver) {
             Thread.Sleep(1000);
             ClickByXPath(driver, PRINT_SUCCESSCHECK);
+        }
+
+        // 데이터시트 조회
+        public void LoadDataListAdd (ChromeDriver driver) {
+            Thread.Sleep(1000);
+            LoadDataList(driver, DATALIST_BODY);
         }
         #endregion
 
@@ -376,22 +434,68 @@ namespace Leak_UI.Model
                 if (resultTest < 5) {
                     PrintProgress = "출력 완료 !";
                 }
+            } 
+        }
+
+        
+        
+        private ObservableCollection<List<object>> _webDataList;
+        public ObservableCollection<List<object>> WebDataList {
+            get { return _webDataList; }
+            set {
+                _webDataList = value;
+                OnPropertyChanged(nameof(WebDataList));
             }
         }
-        #endregion
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        List<string> resultDataList = new List<string>();
-        public bool CheckOverLapData(string resultData) {
-            if (resultDataList.Count != Int32.Parse(BoxSize)) {
-                resultDataList.Add(resultData);
+        protected virtual void OnPropertyChanged(string propertyName) {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        // 데이터리스트 긁어오기 (XPath 기반)
+        private ObservableCollection<List<object>> LoadDataList(IWebDriver driver, string xpath) {
+            var _table = driver.FindElement(By.XPath(xpath));
+            var _tBody = _table.FindElement(By.TagName("tbody")); // DataListBody
+            var _tRows = _tBody.FindElements(By.TagName("tr"));
+            List<List<object>> WebRowList = new List<List<object>>();
 
-                if (resultDataList.Count != resultDataList.Distinct().Count()) {
-                    return false;
+            foreach (var row in _tRows.Skip(1)) {
+                List<object> WebColumnList = new List<object>();
+                var columns = row.FindElements(By.TagName("td"));
+                if (columns.Count >= 2) // 최소한 2개의 열이 필요함
+                {
+                    for (int i = 0; i < columns.Count; i++) {
+                        object value = columns[i].Text;
+                        WebColumnList.Add(value);
+                    }
+                    WebRowList.Add(WebColumnList);
                 }
-            } else {
+                WebDataList = new ObservableCollection<List<object>>(WebRowList);
+            }
+
+            return WebDataList;
+        }
+
+        #endregion
+        
+        // 들어온값에 대하여 중복이 있는가 확인하는 용도
+        private List<string> resultDataList = new List<string>();
+        public bool IsDuplicate(string resultData) {
+            // 호출되던 도중에 ScanCount가 , BoxSize와 동일하면
+            // => 출력이 완료되게 되면 리스트 초기화
+            if (PrintSuccese == true) {
                 resultDataList.Clear();
             }
-            return true;
+            
+            if (!resultDataList.Contains(resultData)) {
+                // 중복된 값이 없을때 리스트 생성
+                resultDataList.Add(resultData);
+                return true;
+                
+            } else {
+                // 중복된 값이 들어왔을때 false반환
+                return false;
+            }
         }
     }
 }

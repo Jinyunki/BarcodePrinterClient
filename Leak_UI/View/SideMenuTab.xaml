@@ -43,12 +43,12 @@
             </Button.Background>
         </Button>
 
-        <!--Today WorkCount-->
+        <!--Web Data-->
         <Button  Grid.Row="2" Margin="10"
                  Style="{StaticResource Graph_btn}"
-                 Command="{Binding }" >
+                 Command="{Binding btData}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_graph_default.png"/>
+                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_dataList_default.png"/>
             </Button.Background>
         </Button>
 

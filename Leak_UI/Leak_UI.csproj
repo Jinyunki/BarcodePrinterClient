@@ -123,24 +123,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\GridItem.cs" />
+    <Compile Include="Model\ExcelDataModel.cs" />
+    <Compile Include="Model\Main_GridItem.cs" />
     <Compile Include="Model\MainModel.cs" />
-    <Compile Include="Model\MatchItem.cs" />
-    <Compile Include="Model\WebCrowling.cs" />
+    <Compile Include="Model\Main_GridItem_MatchItem.cs" />
+    <Compile Include="Model\Main_Crowling.cs" />
     <Compile Include="Utiles\CircularProgressBar.cs" />
     <Compile Include="Utiles\ColorConverter.cs" />
     <Compile Include="Utiles\Command.cs" />
     <Compile Include="Utiles\IDispatcher.cs" />
-    <Compile Include="ViewModel\MainProgramViewModel.cs" />
-    <Compile Include="ViewModel\ExcelRecipeViewModel.cs" />
+    <Compile Include="ViewModel\Main_MatchingViewModel.cs" />
+    <Compile Include="ViewModel\ExcelRecipe_ViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ReissueListViewModel.cs" />
     <Compile Include="ViewModel\SideMenu_ViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ExcelRecipeView.xaml.cs">
       <DependentUpon>ExcelRecipeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MainProgramView.xaml.cs">
-      <DependentUpon>MainProgramView.xaml</DependentUpon>
+    <Compile Include="View\Main_MatchingView.xaml.cs">
+      <DependentUpon>Main_MatchingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReissueList.xaml.cs">
+      <DependentUpon>ReissueList.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SideMenuTab.xaml.cs">
       <DependentUpon>SideMenuTab.xaml</DependentUpon>
@@ -165,7 +170,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MainProgramView.xaml">
+    <Page Include="View\Main_MatchingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReissueList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -256,6 +265,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\img_excel_default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\img_dataList_default.png" />
+    <Resource Include="Assets\img_dataList_event.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Selenium.WebDriver.4.9.1\build\Selenium.WebDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.4.9.1\build\Selenium.WebDriver.targets')" />

@@ -5,7 +5,7 @@ using System;
 
 namespace Leak_UI.Model
 {
-    public class GridItem : INotifyPropertyChanged {
+    public class Main_GridItem : INotifyPropertyChanged {
         private int _index;
         public int Index {
             get { return _index; }
@@ -55,8 +55,8 @@ namespace Leak_UI.Model
                 }
             }
         }
-        private ObservableCollection<MatchItem> _matchItems = new ObservableCollection<MatchItem>();
-        public ObservableCollection<MatchItem> MatchItems {
+        private ObservableCollection<Main_GridItem_MatchItem> _matchItems = new ObservableCollection<Main_GridItem_MatchItem>();
+        public ObservableCollection<Main_GridItem_MatchItem> MatchItems {
             get { return _matchItems; }
             set {
                 _matchItems = value;

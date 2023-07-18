@@ -13,14 +13,14 @@ using System.Windows.Input;
 
 namespace Leak_UI.ViewModel
 {
-    public class MainProgramViewModel : ViewModelBase
+    public class Main_MatchingViewModel : ViewModelBase
     {
         private SerialPort serialPort1;
         private IDispatcher dispatcher;
 
         // 웹크롤링
-        private WebCrowling _webCrowling = new WebCrowling();
-        public WebCrowling WebCrowling {
+        private Main_Crowling _webCrowling = new Main_Crowling();
+        public Main_Crowling WebCrowling {
             get { return _webCrowling; }
             set { _webCrowling = value; RaisePropertyChanged(nameof(WebCrowling)); }
         }
@@ -31,8 +31,8 @@ namespace Leak_UI.ViewModel
             set { model = value; RaisePropertyChanged(nameof(Model)); }
         }
 
-        public MainProgramViewModel(IDispatcher dispatcher) {
-            _webCrowling = new WebCrowling();
+        public Main_MatchingViewModel(IDispatcher dispatcher) {
+            _webCrowling = new Main_Crowling();
             this.dispatcher = dispatcher;
             OpenSerialPort();
             BtnEvent();
@@ -95,8 +95,8 @@ namespace Leak_UI.ViewModel
             }
         }
         #region GridViewStyle
-        private ObservableCollection<GridItem> _gridData = new ObservableCollection<GridItem>();
-        public ObservableCollection<GridItem> GridData {
+        private ObservableCollection<Main_GridItem> _gridData = new ObservableCollection<Main_GridItem>();
+        public ObservableCollection<Main_GridItem> GridData {
             get { return _gridData; }
             set {
                 _gridData = value;
@@ -119,10 +119,18 @@ namespace Leak_UI.ViewModel
                         OnCreate_BoxGrid(resultData);
                         // 모델인식,작업지시서 매칭여부, 해당모델의 매칭데이터 여부
                     } else if (resultData.StartsWith("T")) {
-                        OnBinding_BoxGrid(resultData);
+                        if (WebCrowling.IsDuplicate(indata) == true) {
+                            OnBinding_BoxGrid(resultData);
+                        } else {
+                            MessageBox.Show("중복된 바코드 입니다");
+                        }
                         // 매칭 데이터 바인딩
                     } else if (resultData.StartsWith("M")) {
-                        OnBinding_MatchGrid(resultData);
+                        if (WebCrowling.IsDuplicate(indata) == true) {
+                            OnBinding_MatchGrid(resultData);
+                        } else {
+                            MessageBox.Show("중복된 바코드 입니다");
+                        }
                     }
                     //AddGridItems_TEST();
                     WebCrowling.BoxSize = GridData.Count.ToString();
@@ -139,14 +147,15 @@ namespace Leak_UI.ViewModel
         private void OnCreate_BoxGrid(string data) {
             // 데이터를 읽어와서 GridData에 추가 또는 수정하는 로직
             // 예시: GridData.Add(new GridItem(data));
-            WebCrowling = new WebCrowling();
+            WebCrowling = new Main_Crowling();
             WebCrowling.ScanCount = 0;
             GridData.Clear();
             WebCrowling.Product_ID = data;
-            WebCrowling.ReadExcelData();
+            WebCrowling.ReadExcelData(WebCrowling.Product_ID);
+            WebCrowling.PrintSuccese = false;
 
             for (int i = 0; i < WebCrowling.NumberOfColumns * WebCrowling.NumberOfRows; i++) {
-                GridItem gridItem = new GridItem {
+                Main_GridItem gridItem = new Main_GridItem {
                     Index = i + 1,
                     ModelSerial = "",
                     Background = Brushes.Black,
@@ -154,9 +163,9 @@ namespace Leak_UI.ViewModel
                     MatchGridRowSpan = WebCrowling.MatchCount
                 };
 
-                gridItem.MatchItems = new ObservableCollection<MatchItem>();
+                gridItem.MatchItems = new ObservableCollection<Main_GridItem_MatchItem>();
                 for (int j = 0; j < WebCrowling.MatchCount; j++) {
-                    MatchItem matchItem = new MatchItem {
+                    Main_GridItem_MatchItem matchItem = new Main_GridItem_MatchItem {
                         MatchDataSerial = "",
                         MatchDataBackground = Brushes.Black
                     };
@@ -183,7 +192,7 @@ namespace Leak_UI.ViewModel
                     if (WebCrowling.MatchCount > 1 &&WebCrowling.ScanCount > 0 && WebCrowling.ScanCount.ToString() == WebCrowling.BoxSize) {
                         WebCrowling.GetPrint();
                         GridData.Clear();
-                        WebCrowling = new WebCrowling();
+                        WebCrowling = new Main_Crowling();
                     }
 
                 } else {
@@ -210,7 +219,7 @@ namespace Leak_UI.ViewModel
                 if (WebCrowling.ScanCount.ToString() == WebCrowling.BoxSize) {
                     WebCrowling.GetPrint();
                     GridData.Clear();
-                    WebCrowling = new WebCrowling();
+                    WebCrowling = new Main_Crowling();
                 }
             } else {
                 MessageBox.Show("일치하지 않는 시리얼 번호입니다\n" + (WebCrowling.MatchScanCount) + "번 위치 모델을 확인하세요.");

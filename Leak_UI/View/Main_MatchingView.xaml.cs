@@ -5,9 +5,9 @@ namespace Leak_UI.View
     /// <summary>
     /// BodyView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainProgramView : UserControl
+    public partial class Main_MatchingView : UserControl
     {
-        public MainProgramView() {
+        public Main_MatchingView() {
             InitializeComponent();
         }
     }

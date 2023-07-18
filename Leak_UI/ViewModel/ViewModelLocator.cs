@@ -34,8 +34,9 @@ namespace Leak_UI.ViewModel
             SimpleIoc.Default.Register<IDispatcher, DispatcherWrapper>();
 
             SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<MainProgramViewModel>();
-            SimpleIoc.Default.Register<ExcelRecipeViewModel>();
+            SimpleIoc.Default.Register<Main_MatchingViewModel>();
+            SimpleIoc.Default.Register<ExcelRecipe_ViewModel>();
+            SimpleIoc.Default.Register<ReissueListViewModel>();
         }
 
         public MainViewModel Main {
@@ -43,14 +44,19 @@ namespace Leak_UI.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        public MainProgramViewModel MainProgramViewModel {
+        public Main_MatchingViewModel Main_MatchingViewModel {
             get {
-                return ServiceLocator.Current.GetInstance<MainProgramViewModel>();
+                return ServiceLocator.Current.GetInstance<Main_MatchingViewModel>();
             }
         }
-        public ExcelRecipeViewModel ExcelRecipeViewModel {
+        public ExcelRecipe_ViewModel ExcelRecipe_ViewModel {
             get {
-                return ServiceLocator.Current.GetInstance<ExcelRecipeViewModel>();
+                return ServiceLocator.Current.GetInstance<ExcelRecipe_ViewModel>();
+            }
+        }
+        public ReissueListViewModel ReissueListViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<ReissueListViewModel>();
             }
         }
 
