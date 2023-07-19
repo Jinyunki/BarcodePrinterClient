@@ -74,7 +74,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" FontSize="15" Style="{StaticResource font_style}"
-                                   Text="{Binding WebCrowling.ResultConnect}" VerticalAlignment="Center"/>
+                                   Text="{Binding ResultConnect}" VerticalAlignment="Center"/>
 
                 <Button  x:Name="btn_PortConnect" Grid.Column="1" Margin="20"
                                      Style="{StaticResource Close_btn}" 
@@ -85,7 +85,7 @@
                 </Button>
 
             </Grid>
-            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tb_Model" Text="{Binding WebCrowling.Product_ID}" 
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tb_Model" Text="{Binding Product_ID}" 
                                      FontSize="15" MinWidth="150" Style="{StaticResource font_style}"
                                      VerticalAlignment="Center" HorizontalAlignment="Left" />
 
@@ -94,10 +94,10 @@
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding WebCrowling.BoxSize}"
+                <TextBlock Grid.Column="0" Text="{Binding BoxSize}"
                                Style="{StaticResource font_style}" FontSize="15"/>
             </Grid>
-            <TextBlock Grid.Column="2" Grid.Row="3"  x:Name="tb_PrintCount" Text="{Binding WebCrowling.ScanCount}" 
+            <TextBlock Grid.Column="2" Grid.Row="3"  x:Name="tb_PrintCount" Text="{Binding ScanCount}" 
                                      FontSize="15" MinWidth="50" Style="{StaticResource font_style}"
                                      VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
@@ -107,13 +107,13 @@
                     <ColumnDefinition Width="4*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="{Binding WebCrowling.LabelType}" VerticalAlignment="Center"
+                <TextBlock Grid.Column="0" Text="{Binding LabelType}" VerticalAlignment="Center"
                                    FontSize="15" Style="{StaticResource font_style}"/>
 
 
             </Grid>
 
-            <TextBlock Grid.Column="2" Grid.Row="5" Text="{Binding WebCrowling.PrintProgress}" 
+            <TextBlock Grid.Column="2" Grid.Row="5" Text="{Binding PrintProgress}" 
                                    VerticalAlignment="Center" Style="{StaticResource font_style}"
                                    FontSize="15"/>
 
@@ -141,7 +141,7 @@
                            HorizontalAlignment="Left" VerticalAlignment="Center"
                            Foreground="White" FontSize="15"/>
 
-            <!--<TextBox Grid.Column="1" Grid.Row="7" Text="{Binding WebCrowling.PrintCount}"/>
+            <!--<TextBox Grid.Column="1" Grid.Row="7" Text="{Binding PrintCount}"/>
             -->
 
 
@@ -151,7 +151,7 @@
             <ItemsControl ItemsSource="{Binding GridData}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Rows="{Binding WebCrowling.NumberOfRows}" Columns="{Binding WebCrowling.NumberOfColumns}"/>
+                        <UniformGrid Rows="{Binding NumberOfRows}" Columns="{Binding NumberOfColumns}"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -189,7 +189,7 @@
                                     <ItemsControl ItemsSource="{Binding MatchItems}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <UniformGrid Rows="{Binding WebCrowling.MatchCount}" Columns="1"/>
+                                                <UniformGrid Rows="{Binding MatchCount}" Columns="1"/>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
@@ -201,7 +201,6 @@
                                                                    Foreground="White"
                                                                    VerticalAlignment="Center"/>
                                                         </Viewbox>
-
                                                     </Grid>
                                                 </Border>
                                             </DataTemplate>
@@ -225,10 +224,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.RowSpan="2" Grid.Column="0" Width="7" Background="{Binding WebCrowling.BoxColor}" HorizontalAlignment="Left"/>
-            <Grid Grid.RowSpan="2" Grid.Column="1" Width="7" Background="{Binding WebCrowling.BoxColor}" HorizontalAlignment="Right"/>
-            <Grid Grid.Row="0" Grid.ColumnSpan="2" Height="7" Background="{Binding WebCrowling.BoxColor}" VerticalAlignment="Top"/>
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="7" Background="{Binding WebCrowling.BoxColor}" VerticalAlignment="Bottom"/>
+            <Grid Grid.RowSpan="2" Grid.Column="0" Width="7" Background="{Binding BoxColor}" HorizontalAlignment="Left"/>
+            <Grid Grid.RowSpan="2" Grid.Column="1" Width="7" Background="{Binding BoxColor}" HorizontalAlignment="Right"/>
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" Height="7" Background="{Binding BoxColor}" VerticalAlignment="Top"/>
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="7" Background="{Binding BoxColor}" VerticalAlignment="Bottom"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace Leak_UI.Model
 {
-    public class Main_GridItem_MatchItem : INotifyPropertyChanged
+    public class Main_GridItem_MatchItem : ViewModelProvider
     {
         private string _matchDataSerial;
         public string MatchDataSerial {
@@ -11,7 +11,7 @@ namespace Leak_UI.Model
             set {
                 if (_matchDataSerial != value) {
                     _matchDataSerial = value;
-                    OnPropertyChanged("MatchDataSerial");
+                    RaisePropertyChanged("MatchDataSerial");
                 }
             }
         }
@@ -22,16 +22,9 @@ namespace Leak_UI.Model
             set {
                 if (_matchDataBackground != value) {
                     _matchDataBackground = value;
-                    OnPropertyChanged("MatchDataBackground");
+                    RaisePropertyChanged("MatchDataBackground");
                 }
             }
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
     

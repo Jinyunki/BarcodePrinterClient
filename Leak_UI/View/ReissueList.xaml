@@ -25,11 +25,11 @@
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Text="{Binding Main_Crowling.SearchProduct_ID, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Column="0" Text="{Binding SearchItem, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="1" Content="조회" Command="{Binding btnInquiry}"/>
         </Grid>
         <Grid Grid.Row="1">
-            <DataGrid ItemsSource="{Binding DataList}" AutoGenerateColumns="False"
+            <DataGrid ItemsSource="{Binding WebDataList}" AutoGenerateColumns="False"
                   CellEditEnding="DataGrid_CellEditEnding" Background="#FF1D1D1D"
                   Style="{StaticResource DataGridStyle}">
                 <DataGrid.Columns>

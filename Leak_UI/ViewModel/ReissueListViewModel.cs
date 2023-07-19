@@ -1,37 +1,21 @@
-﻿using GalaSoft.MvvmLight;
-using Leak_UI.Model;
+﻿using Leak_UI.Model;
 using Leak_UI.Utiles;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace Leak_UI.ViewModel
 {
-    public class ReissueListViewModel : ViewModelBase
+    public class ReissueListViewModel : ReissueList_Model
     {
-        Main_Crowling Main_Crowling = new Main_Crowling();
-        public ICommand btnInquiry { get; set; }
+        
         public ReissueListViewModel() {
-            btnInquiry = new Command(btnInquiryCute,CanExCute);
+            btnInquiry = new Command(BtnInquiryCute,CanExCute);
         }
 
-        private void btnInquiryCute(object obj) {
-            Main_Crowling = new Main_Crowling();
-            Main_Crowling.GetWebDataRead(Main_Crowling.SearchProduct_ID);
-            DataList = Main_Crowling.WebDataList;
+        private void BtnInquiryCute(object obj) {
+            GetWebDataRead(SearchItem);
         }
 
         private bool CanExCute(object obj) {
             return true;
-        }
-
-        private ObservableCollection<List<object>> _dataList;
-        public ObservableCollection<List<object>> DataList {
-            get { return _dataList; }
-            set {
-                _dataList = value;
-                RaisePropertyChanged(nameof(DataList));
-            }
         }
     }
 }

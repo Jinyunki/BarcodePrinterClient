@@ -59,8 +59,7 @@ namespace Leak_UI.ViewModel
                 return ServiceLocator.Current.GetInstance<ReissueListViewModel>();
             }
         }
-
-        public static void Cleanup()
+        public static void Cleanup(int position)
         {
             // TODO Clear the ViewModels
         }

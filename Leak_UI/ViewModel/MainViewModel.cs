@@ -5,27 +5,13 @@ using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using Leak_UI.Model;
 using System;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Leak_UI.ViewModel
 {
     public class MainViewModel : MainModel
     {
-        #region CurrentViewChanger
-        public ViewModelLocator _locator = new ViewModelLocator();
-        private ViewModelBase _currentViewModel;
-        public ViewModelBase CurrentViewModel {
-            get {
-                return _currentViewModel;
-            }
-            set {
-                if (_currentViewModel != value) {
-                    Set<ViewModelBase>(ref _currentViewModel, value);
-                    _currentViewModel.RaisePropertyChanged("CurrentViewModel");
-                }
-            }
-        }
-
-        #endregion
         public MainViewModel() {
             CurrentViewModel = _locator.Main_MatchingViewModel;
             WinBtnEvent();
@@ -38,57 +24,24 @@ namespace Leak_UI.ViewModel
             btData = new Command(btDataCute, CanExCute);
         }
         private void btDataCute(object obj) {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             CurrentViewModel = _locator.ReissueListViewModel;
         }
         private void btExcelCute(object obj) {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             CurrentViewModel = _locator.ExcelRecipe_ViewModel;
         }
 
         private void btMainHomeCute(object obj) {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             CurrentViewModel = _locator.Main_MatchingViewModel;
         }
         private bool CanExCute(object obj) {
             return true;
         }
 
-        #region Window State
-
-        private WindowState _windowState;
-        public WindowState WindowState {
-            get { return _windowState; }
-            set {
-                if (_windowState != value) {
-                    _windowState = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-        public ICommand BtnMinmize { get; private set; }
-        public ICommand BtnMaxsize { get; private set; }
-        public ICommand BtnClose { get; private set; }
-
-        private void WinBtnEvent() {
-            BtnMinmize = new RelayCommand(WinMinmize);
-            BtnMaxsize = new RelayCommand(WinMaxSize);
-            BtnClose = new RelayCommand(WindowClose);
-        }
 
 
-        // Window Minimize
-        private void WinMinmize() {
-            WindowState = WindowState.Minimized;
-        }
-
-        // Window Size
-        private void WinMaxSize() {
-            WindowState = (WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
-        }
-
-
-        private void WindowClose() {
-            Application.Current.Shutdown();
-        }
-
-        #endregion
+        
     }
 }
