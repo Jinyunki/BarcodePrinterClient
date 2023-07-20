@@ -11,7 +11,6 @@ namespace Leak_UI.Model
 {
     public class ViewModelProvider : ViewModelBase
     {
-        
         public SerialPort serialPort1;
         public IDispatcher dispatcher;
         public ChromeDriverService driverService;

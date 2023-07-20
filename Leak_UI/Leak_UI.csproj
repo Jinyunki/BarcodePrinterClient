@@ -126,7 +126,6 @@
     <Compile Include="Model\ExcelDataModel.cs" />
     <Compile Include="Model\Main_GridItem.cs" />
     <Compile Include="Model\MainModel.cs" />
-    <Compile Include="Model\Main_GridItem_MatchItem.cs" />
     <Compile Include="Model\Main_Crowling.cs" />
     <Compile Include="Model\ReissueList_Model.cs" />
     <Compile Include="Model\ViewModelProvider.cs" />

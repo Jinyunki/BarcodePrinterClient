@@ -16,15 +16,6 @@ namespace Leak_UI.ViewModel
 {
     public class Main_MatchingViewModel : Main_Crowling
     {
-
-        // 웹크롤링
-        //private Main_Crowling _webCrowling = new Main_Crowling();
-        //public Main_Crowling WebCrowling {
-        //    get { return _webCrowling; }
-        //    set { _webCrowling = value;
-        //        RaisePropertyChanged(nameof(WebCrowling)); }
-        //}
-        
         public Main_MatchingViewModel(IDispatcher dispatcher) {
             //_webCrowling = new Main_Crowling();
             this.dispatcher = dispatcher;
@@ -44,6 +35,7 @@ namespace Leak_UI.ViewModel
         #region 크롤링
         private void BtnPrint_Click(object obj) {
             GetPrint();
+            GridData.Clear();
         }
         #endregion
         
@@ -170,9 +162,9 @@ namespace Leak_UI.ViewModel
                         MatchGridRowSpan = MatchCount
                     };
 
-                    gridItem.MatchItems = new ObservableCollection<Main_GridItem_MatchItem>();
+                    gridItem.MatchItems = new ObservableCollection<Main_GridItem>();
                     for (int j = 0; j < MatchCount; j++) {
-                        Main_GridItem_MatchItem matchItem = new Main_GridItem_MatchItem {
+                        Main_GridItem matchItem = new Main_GridItem {
                             MatchDataSerial = "",
                             MatchDataBackground = Brushes.Black
                         };
@@ -189,7 +181,6 @@ namespace Leak_UI.ViewModel
 
         // 모델과 작업지시서 데이터 바인딩
         private void OnBinding_BoxGrid(string data) {
-
             Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             try {
 
@@ -224,13 +215,12 @@ namespace Leak_UI.ViewModel
 
         // 매칭아이템 바인딩
         private void OnBinding_MatchGrid(string data) {
-
             Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             try {
 
                 // 데이터를 처리하고 GridData를 수정하는 로직
                 // 예시: GridData[0].TestMatch[0].MatchDataSerial = "TEST성공";
-                if (data == MmatchItems[MatchScanCount] && GridData[ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
+                if (data == MatchItemList[MatchScanCount] && GridData[ScanCount].ModelSerial != "") { // M 매칭아이템이 들어왔을때
                     GridData[ScanCount].MatchItems[MatchScanCount].MatchDataSerial = "매칭 : " + data;
                     GridData[ScanCount].MatchItems[MatchScanCount].MatchDataBackground = Brushes.Green;
                     MatchScanCount++;

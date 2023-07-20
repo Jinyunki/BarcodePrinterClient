@@ -40,6 +40,7 @@ namespace Leak_UI.Model
             set {
                 if (_modelSerial != value) {
                     _modelSerial = value;
+
                     RaisePropertyChanged("ModelSerial");
                 }
             }
@@ -54,12 +55,34 @@ namespace Leak_UI.Model
                 }
             }
         }
-        private ObservableCollection<Main_GridItem_MatchItem> _matchItems = new ObservableCollection<Main_GridItem_MatchItem>();
-        public ObservableCollection<Main_GridItem_MatchItem> MatchItems {
+        private ObservableCollection<Main_GridItem> _matchItems = new ObservableCollection<Main_GridItem>();
+        public ObservableCollection<Main_GridItem> MatchItems {
             get { return _matchItems; }
             set {
                 _matchItems = value;
                 RaisePropertyChanged(nameof(MatchItems));
+            }
+        }
+
+        private string _matchDataSerial;
+        public string MatchDataSerial {
+            get { return _matchDataSerial; }
+            set {
+                if (_matchDataSerial != value) {
+                    _matchDataSerial = value;
+                    RaisePropertyChanged("MatchDataSerial");
+                }
+            }
+        }
+        private Brush _matchDataBackground;
+
+        public Brush MatchDataBackground {
+            get { return _matchDataBackground; }
+            set {
+                if (_matchDataBackground != value) {
+                    _matchDataBackground = value;
+                    RaisePropertyChanged("MatchDataBackground");
+                }
             }
         }
     }

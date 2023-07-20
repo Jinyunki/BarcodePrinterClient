@@ -59,24 +59,7 @@ namespace Leak_UI.Model
         public void GetWebDataRead(string inputProductID) {
             Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             try {
-                driverService = ChromeDriverService.CreateDefaultService();
-
-                // 크롤링 드라이버 CMD창 Hide
-                driverService.HideCommandPromptWindow = true;
-
-                options = new ChromeOptions();
-
-                // 크롤링 GPU 가속화 Off
-                options.AddArgument("disable-gpu");
-
-                // 크롤링 웹 View Background 처리
-                //options.AddArgument("--headless");
-                //options.AddArgument("ignore-certificate-errors");
-
-                DriverSet(driverService, options);
-
-                driver.Navigate().GoToUrl(webUri);
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+                SetWebDrive();
 
                 Login(driver);
                 // 부품식별표 > 라벨선택기능 추가필요 ( 입력될 품번을 기준으로 레시피에서 참고하여 업데이트해야함 )
@@ -84,6 +67,8 @@ namespace Leak_UI.Model
                 SelectLabel(driver);
                 // 고객품번 입력후 엔터 기능 추가필요
                 SendTextInput(driver, MODEL_PRODUCT_ID, inputProductID);
+                SetWebDriveWaiting(driver, MODEL_PRODUCT_ID);
+
                 LoadDataListAdd(driver);
                 driver.Quit();
             } catch (Exception e) {
@@ -92,6 +77,7 @@ namespace Leak_UI.Model
             }
 
         }
+
         private ObservableCollection<List<object>> _webDataList;
         public ObservableCollection<List<object>> WebDataList {
             get { return _webDataList; }

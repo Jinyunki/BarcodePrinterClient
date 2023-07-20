@@ -5,7 +5,6 @@ using System.Windows.Media;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Globalization;
-using System.Threading;
 using System.Diagnostics;
 using System.Reflection;
 using OfficeOpenXml;
@@ -16,7 +15,49 @@ namespace Leak_UI.Model
 {
     public class WebCrowlingCollection : ViewModelProvider
     {
+        public WebDriverWait _webDriverWait;
+        public void SetWebDrive() {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
+            try {
 
+                driverService = ChromeDriverService.CreateDefaultService();
+                // 크롤링 드라이버 CMD창 Hide
+                driverService.HideCommandPromptWindow = true;
+
+                options = new ChromeOptions();
+
+                // 크롤링 GPU 가속화 Off
+                options.AddArgument("disable-gpu");
+
+                // 크롤링 웹 View Background 처리
+                //options.AddArgument("--headless");
+                //options.AddArgument("ignore-certificate-errors");
+
+                DriverSet(driverService, options);
+
+                driver.Navigate().GoToUrl(webUri);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+            } catch (Exception e) {
+                Trace.WriteLine(TraceCatch(MethodBase.GetCurrentMethod().Name) + e);
+                throw;
+            }
+        }
+        /// <summary>
+        /// 로딩과,데이터처리가 정상적으로 됬을때 다음 으로 넘어가게 하는 메서드
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="path"></param>
+        public void SetWebDriveWaiting(ChromeDriver driver, string path) {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
+            try {
+                _webDriverWait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                _webDriverWait.Until(ExpectedConditions.InvisibilityOfElementLocated(By.XPath(path)));
+
+            } catch (Exception e) {
+                Trace.WriteLine(TraceCatch(MethodBase.GetCurrentMethod().Name) + e);
+                throw;
+            }
+        }
         #region WebCrowling Item
         public string webUri = "https://jc-label.mobis.co.kr/";
         public string id = "SS1F";
@@ -37,12 +78,12 @@ namespace Leak_UI.Model
 
         public string DATALIST_BODY = "//*[@id='ContentPlaceHolder1_dxGrid2_DXMainTable']";
 
-        private List<string> _matchItems = new List<string>();
-        public List<string> MmatchItems {
-            get { return _matchItems; }
+        private List<string> _matchItemList = new List<string>();
+        public List<string> MatchItemList {
+            get { return _matchItemList; }
             set {
-                _matchItems = value;
-                RaisePropertyChanged(nameof(MmatchItems));
+                _matchItemList = value;
+                RaisePropertyChanged(nameof(MatchItemList));
             }
         }
 
@@ -222,7 +263,7 @@ namespace Leak_UI.Model
 
                             for (int i = 0; i < 3; i++) {
                                 if (worksheet.Cells[row, i + 8].Value?.ToString() != "") {
-                                    MmatchItems.Add(worksheet.Cells[row, i + 8].Value?.ToString());
+                                    MatchItemList.Add(worksheet.Cells[row, i + 8].Value?.ToString());
                                 }
                             }
                             break; // 해당 데이터를 찾았으므로 반복문 종료

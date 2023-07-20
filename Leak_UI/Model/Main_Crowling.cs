@@ -14,31 +14,24 @@ namespace Leak_UI.Model
             Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
             try {
                 PrintProgress = "출력 시작";
-                driverService = ChromeDriverService.CreateDefaultService();
-
-                // 크롤링 드라이버 CMD창 Hide
-                driverService.HideCommandPromptWindow = true;
-
-                options = new ChromeOptions();
-
-                // 크롤링 GPU 가속화 Off
-                options.AddArgument("disable-gpu");
-
-                // 크롤링 웹 View Background 처리
-                //options.AddArgument("--headless");
-                //options.AddArgument("ignore-certificate-errors");
-
-                DriverSet(driverService, options);
-
-                driver.Navigate().GoToUrl(webUri);
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(2);
+                SetWebDrive();
 
                 Login(driver);
 
-
-
                 SelectLabel(driver);
-                InputProductInfo(driver);
+
+                // 모델 정보 입력
+                SendTextInput(driver, MODEL_PRODUCT_ID, Product_ID);
+                SetWebDriveWaiting(driver, MODEL_PRODUCT_ID);
+
+                // 포장 수량 입력
+                SendTextInput(driver, PACKAGED_QUANTITY, ScanCount.ToString());
+                SetWebDriveWaiting(driver, PACKAGED_QUANTITY);
+
+                // 라벨 출력 수량 입력
+                SendTextInput(driver, PRINT_QUANTITY, PrintCount);
+                SetWebDriveWaiting(driver, PRINT_QUANTITY);
+
                 VerifyPrintData(driver);
                 PrintSuccese = true;
             } catch (Exception e) {
@@ -73,5 +66,7 @@ namespace Leak_UI.Model
                 throw;
             }
         }
+
     }
+
 }
