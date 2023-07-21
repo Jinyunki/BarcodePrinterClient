@@ -123,22 +123,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\ExcelDataModel.cs" />
     <Compile Include="Model\Main_GridItem.cs" />
     <Compile Include="Model\MainModel.cs" />
-    <Compile Include="Model\Main_Crowling.cs" />
-    <Compile Include="Model\ReissueList_Model.cs" />
     <Compile Include="Model\ViewModelProvider.cs" />
-    <Compile Include="Model\WebCrowlingCollection.cs" />
-    <Compile Include="Utiles\CircularProgressBar.cs" />
-    <Compile Include="Utiles\ColorConverter.cs" />
     <Compile Include="Utiles\Command.cs" />
+    <Compile Include="Utiles\ExcelReadManager.cs" />
     <Compile Include="Utiles\IDispatcher.cs" />
+    <Compile Include="Utiles\MatchingManager.cs" />
+    <Compile Include="Utiles\SerialPortManager.cs" />
+    <Compile Include="Utiles\WebDriveManager.cs" />
     <Compile Include="ViewModel\Main_MatchingViewModel.cs" />
     <Compile Include="ViewModel\ExcelRecipe_ViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ReissueListViewModel.cs" />
-    <Compile Include="ViewModel\SideMenu_ViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ExcelRecipeView.xaml.cs">
       <DependentUpon>ExcelRecipeView.xaml</DependentUpon>

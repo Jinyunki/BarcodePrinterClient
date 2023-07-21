@@ -1,4 +1,5 @@
-﻿using Leak_UI.ViewModel;
+﻿using Leak_UI.Model;
+using Leak_UI.ViewModel;
 using System.Collections.Generic;
 using System.Windows.Controls;
 
@@ -28,7 +29,7 @@ namespace Leak_UI.View
                     dataItem[columnIndex] = newValue;
 
                     // Excel 데이터 수정
-                    _viewModel.UpdateExcelFile();
+                    _viewModel.UpdateExcelFile(ViewModelProvider.PATH);
                 }
             }
         }

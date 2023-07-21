@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Leak_UI.ViewModel;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Input;
 
