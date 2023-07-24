@@ -20,7 +20,7 @@ namespace Leak_UI.Model
         /// <summary>
         /// 23 07 21 해당 경로를 직접 정하고 변경할수있게 수정하면 어떨까? 업데이트예정
         /// </summary>
-        public static string PATH = Path.Combine(@"D:\JinYunki\Leak_UI2\Leak_UI\bin\Release", "LabelConfig.xlsx");
+        public static string PATH = Path.Combine(@"D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\RecipeData", "LabelConfig.xlsx");
 
         public void From_WebItem_To_Model() {
             LabelType = webDriveManager.LabelType;
@@ -201,6 +201,80 @@ namespace Leak_UI.Model
                 RaisePropertyChanged("PrintSuccese");
             }
         }
+
+        #region MatchItemList
+
+        private int _index;
+        public int Index {
+            get { return _index; }
+            set {
+                _index = value;
+                RaisePropertyChanged("Index");
+            }
+        }
+        private int _gridRowSpan;
+        public int GridRowSpan {
+            get { return _gridRowSpan; }
+            set {
+                if (_gridRowSpan != value) {
+                    _gridRowSpan = value;
+                    RaisePropertyChanged("GridRowSpan");
+                }
+            }
+        }
+        private int _matchGridRowSpan;
+        public int MatchGridRowSpan {
+            get { return _matchGridRowSpan; }
+            set {
+                if (_matchGridRowSpan != value) {
+                    _matchGridRowSpan = value;
+                    RaisePropertyChanged("MatchGridRowSpan");
+                }
+            }
+        }
+
+        private Brush _background;
+        public Brush Background {
+            get { return _background; }
+            set {
+                if (_background != value) {
+                    _background = value;
+                    RaisePropertyChanged("Background");
+                }
+            }
+        }
+        private ObservableCollection<ViewModelProvider> _matchItems = new ObservableCollection<ViewModelProvider>();
+        public ObservableCollection<ViewModelProvider> MatchItems {
+            get { return _matchItems; }
+            set {
+                _matchItems = value;
+                RaisePropertyChanged(nameof(MatchItems));
+            }
+        }
+
+        private string _matchDataSerial;
+        public string MatchDataSerial {
+            get { return _matchDataSerial; }
+            set {
+                if (_matchDataSerial != value) {
+                    _matchDataSerial = value;
+                    RaisePropertyChanged("MatchDataSerial");
+                }
+            }
+        }
+        private Brush _matchDataBackground;
+
+        public Brush MatchDataBackground {
+            get { return _matchDataBackground; }
+            set {
+                if (_matchDataBackground != value) {
+                    _matchDataBackground = value;
+                    RaisePropertyChanged("MatchDataBackground");
+                }
+            }
+        }
+
+        #endregion
 
         public string TraceStart(string methodName) {
             return "==========   Start   ==========\nMethodName : " + methodName + "\n";

@@ -141,7 +141,7 @@
     
     
     <!--// Window btn style //-->
-                            <Style TargetType="Button" x:Key="CommonButtonStyle">
+    <Style TargetType="Button" x:Key="CommonButtonStyle">
                                 <Setter Property="FontFamily" Value="Montserret"/>
                                 <Setter Property="Cursor" Value="Hand"/>
                                 <Setter Property="Foreground" Value="White"/>
@@ -160,8 +160,8 @@
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
-                            <!--// Text font style //-->
-                            <Style x:Key="font_style" TargetType="TextBlock">
+    <!--// Text font style //-->
+    <Style x:Key="font_style" TargetType="TextBlock">
 
                                 <Setter Property="FontFamily"
                     Value="Fonts/Roboto-Light.ttf #Roboto"/>
@@ -179,9 +179,8 @@
                     Value="20"/>
 
                             </Style>
-
-                            <!--// Data Grid Style-->
-                            <Style x:Key="DataGridStyle" TargetType="DataGrid">
+    <!--// Data Grid Style-->
+    <Style x:Key="DataGridStyle" TargetType="DataGrid">
                                 <!-- Make the border and grid lines a little less imposing -->
                                 <Setter Property="BorderBrush" Value="#DDDDDD" />
                                 <Setter Property="HorizontalGridLinesBrush" Value="#DDDDDD" />
@@ -207,9 +206,9 @@
                                         </Style>
                                     </Setter.Value>
                                 </Setter>
-                                
-                                
-                                
+
+
+
                                 <Setter Property="CellStyle">
                                     <Setter.Value>
                                         <Style TargetType="DataGridCell">
@@ -254,5 +253,66 @@
                                     </Setter.Value>
                                 </Setter>
                             </Style>
-
+    <!-- Define the default style for the ComboBoxItem -->
+    <Style TargetType="ComboBoxItem">
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="#2C3E50"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+    <!-- Define the style for the ComboBox -->
+    <Style TargetType="ComboBox">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="#2E333A"/>
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="ItemContainerStyle" Value="{StaticResource {x:Type ComboBoxItem}}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ComboBox">
+                                            <Grid>
+                                                <ToggleButton x:Name="ToggleButton"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    Background="{TemplateBinding Background}"
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                    ClickMode="Press">
+                                                    <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
+                                                </ToggleButton>
+                                                <Popup x:Name="Popup"
+                                                AllowsTransparency="True"
+                                                IsOpen="{TemplateBinding IsDropDownOpen}"
+                                                Placement="Bottom"
+                                                Focusable="False"
+                                                PopupAnimation="Slide">
+                                                    <Border x:Name="DropDown"
+                                                    Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <ScrollViewer>
+                                                            <ItemsPresenter />
+                                                        </ScrollViewer>
+                                                    </Border>
+                                                </Popup>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+    
 </ResourceDictionary>

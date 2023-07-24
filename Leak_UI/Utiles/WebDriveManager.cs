@@ -375,7 +375,7 @@ namespace Leak_UI.Utiles
                 SetWebDriveWaiting(driver, MODEL_PRODUCT_ID);
 
                 LoadDataListAdd(driver,webDataList);
-                driver.Quit();
+                //driver.Quit();
             } catch (Exception e) {
                 Trace.WriteLine("========== Exception ==========\nMethodName : " + (MethodBase.GetCurrentMethod().Name) + "\nException : " + e);
                 driver.Quit();

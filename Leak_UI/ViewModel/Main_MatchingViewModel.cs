@@ -20,6 +20,17 @@ namespace Leak_UI.ViewModel
         public ICommand BtnPrintCommand { get; set; }
         public ICommand BtnPortConnectCommand { get; set; }
 
+        private string[] portNames;
+
+        public string[] PortNames {
+            get { return portNames; }
+            set {
+                portNames = value;
+                RaisePropertyChanged("PortNames");
+            }
+        }
+
+
         public Main_MatchingViewModel(IDispatcher dispatcher) {
             this.dispatcher = dispatcher;
             SerialConnect();
@@ -28,6 +39,7 @@ namespace Leak_UI.ViewModel
         }
 
         private void SerialConnect() {
+            PortNames = _serialPortManager.GetPortNames();
             _serialPortManager.OpenSerialPort(3, SerialPort_DataReceived);
             ResultConnect = _serialPortManager.ResultConnectValue;
         }
@@ -57,8 +69,8 @@ namespace Leak_UI.ViewModel
 
         }
         #region GridViewStyle
-        private ObservableCollection<Main_GridItem> _gridData = new ObservableCollection<Main_GridItem>();
-        public ObservableCollection<Main_GridItem> GridData {
+        private ObservableCollection<ViewModelProvider> _gridData = new ObservableCollection<ViewModelProvider>();
+        public ObservableCollection<ViewModelProvider> GridData {
             get { return _gridData; }
             set {
                 _gridData = value;
@@ -117,7 +129,7 @@ namespace Leak_UI.ViewModel
                 PrintSuccese = false;
 
                 for (int i = 0; i < NumberOfColumns * NumberOfRows; i++) {
-                    Main_GridItem gridItem = new Main_GridItem {
+                    ViewModelProvider gridItem = new ViewModelProvider {
                         Index = i + 1,
                         ModelSerial = "",
                         Background = Brushes.Black,
@@ -125,9 +137,9 @@ namespace Leak_UI.ViewModel
                         MatchGridRowSpan = MatchCount
                     };
 
-                    gridItem.MatchItems = new ObservableCollection<Main_GridItem>();
+                    gridItem.MatchItems = new ObservableCollection<ViewModelProvider>();
                     for (int j = 0; j < MatchCount; j++) {
-                        Main_GridItem matchItem = new Main_GridItem {
+                        ViewModelProvider matchItem = new ViewModelProvider {
                             MatchDataSerial = "",
                             MatchDataBackground = Brushes.Black
                         };

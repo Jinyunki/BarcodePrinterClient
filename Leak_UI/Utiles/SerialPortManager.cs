@@ -83,6 +83,13 @@ namespace Leak_UI.Utiles
             }
 
         }
-        
+        /// <summary>
+        /// 직렬 연결 된 시리얼포트의 정보를 가져오는 메서드
+        /// </summary>
+        /// <returns></returns>
+        public string[] GetPortNames() {
+            return SerialPort.GetPortNames();
+        }
+
     }
 }

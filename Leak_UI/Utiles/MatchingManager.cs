@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Leak_UI.Utiles
 {
@@ -12,6 +9,15 @@ namespace Leak_UI.Utiles
     {
         // 들어온값에 대하여 중복이 있는가 확인하는 용도
         private List<string> resultDataList = new List<string>();
+        /// <summary>
+        /// 중복된 값이 있는가 체크
+        /// false = 중복된 값이 들어옴.
+        /// true = 중복된 값이 없음 , 들어온 데이터에 한하여 리스트 생성.
+        /// printsuccese가 true면 리스트 초기화
+        /// </summary>
+        /// <param name="resultData"></param>
+        /// <param name="printSuccese"></param>
+        /// <returns></returns>
         public bool IsDuplicate(string resultData,bool printSuccese) {
             Trace.WriteLine("==========   Start   ==========\nMethodName : " + "\n" + (MethodBase.GetCurrentMethod().Name));
             // 호출되던 도중에 ScanCount가 , BoxSize와 동일하면

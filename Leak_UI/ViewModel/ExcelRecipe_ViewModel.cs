@@ -13,7 +13,7 @@ namespace Leak_UI.ViewModel
     public class ExcelRecipe_ViewModel : ViewModelProvider
     {
         public ExcelRecipe_ViewModel() {
-            _excelReadManager.LoadExcelData(ViewModelProvider.PATH);
+            _excelReadManager.LoadExcelData(PATH);
             ExcelData = _excelReadManager.ExcelDataProperty;
         }
 
@@ -26,7 +26,7 @@ namespace Leak_UI.ViewModel
                 RaisePropertyChanged(nameof(ExcelData));
 
                 // 업데이트 트리거
-                UpdateExcelFile(ViewModelProvider.PATH);
+                UpdateExcelFile(PATH);
             }
         }
         

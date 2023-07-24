@@ -123,7 +123,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Main_GridItem.cs" />
     <Compile Include="Model\MainModel.cs" />
     <Compile Include="Model\ViewModelProvider.cs" />
     <Compile Include="Utiles\Command.cs" />
@@ -268,6 +267,9 @@
   <ItemGroup>
     <Resource Include="Assets\img_dataList_default.png" />
     <Resource Include="Assets\img_dataList_event.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RecipeData\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
