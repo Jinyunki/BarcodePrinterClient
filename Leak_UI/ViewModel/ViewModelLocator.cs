@@ -37,6 +37,7 @@ namespace Leak_UI.ViewModel
             SimpleIoc.Default.Register<Main_MatchingViewModel>();
             SimpleIoc.Default.Register<ExcelRecipe_ViewModel>();
             SimpleIoc.Default.Register<ReissueListViewModel>();
+            SimpleIoc.Default.Register<TemporaryPrintViewModel>();
         }
 
         public MainViewModel Main {
@@ -57,6 +58,11 @@ namespace Leak_UI.ViewModel
         public ReissueListViewModel ReissueListViewModel {
             get {
                 return ServiceLocator.Current.GetInstance<ReissueListViewModel>();
+            }
+        }
+        public TemporaryPrintViewModel TemporaryPrintViewModel {
+            get {
+                return ServiceLocator.Current.GetInstance<TemporaryPrintViewModel>();
             }
         }
         public static void Cleanup(int position)

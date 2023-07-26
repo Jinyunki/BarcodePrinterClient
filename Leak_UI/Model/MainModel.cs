@@ -11,6 +11,7 @@ namespace Leak_UI.Model
         public ICommand btMainHome { get; set; }
         public ICommand btExcel { get; set; }
         public ICommand btData { get; set; }
+        public ICommand btTemporary { get; set; }
 
         #region CurrentViewChanger
 

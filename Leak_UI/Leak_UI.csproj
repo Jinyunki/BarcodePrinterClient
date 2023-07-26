@@ -135,6 +135,7 @@
     <Compile Include="ViewModel\ExcelRecipe_ViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ReissueListViewModel.cs" />
+    <Compile Include="ViewModel\TemporaryPrintViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ExcelRecipeView.xaml.cs">
       <DependentUpon>ExcelRecipeView.xaml</DependentUpon>
@@ -147,6 +148,9 @@
     </Compile>
     <Compile Include="View\SideMenuTab.xaml.cs">
       <DependentUpon>SideMenuTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TemporaryPrint.xaml.cs">
+      <DependentUpon>TemporaryPrint.xaml</DependentUpon>
     </Compile>
     <Page Include="GUI_Design_Dictionary.xaml">
       <SubType>Designer</SubType>
@@ -177,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SideMenuTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TemporaryPrint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

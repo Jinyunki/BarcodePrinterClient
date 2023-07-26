@@ -2,6 +2,7 @@ using Leak_UI.Utiles;
 using Leak_UI.Model;
 using System.Reflection;
 using System.Diagnostics;
+using System;
 
 namespace Leak_UI.ViewModel
 {
@@ -17,6 +18,12 @@ namespace Leak_UI.ViewModel
             btMainHome = new Command(btMainHomeCute);
             btExcel = new Command(btExcelCute);
             btData = new Command(btDataCute);
+            btTemporary = new Command(btTemporaryCute);
+        }
+
+        private void btTemporaryCute(object obj) {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
+            CurrentViewModel = _locator.TemporaryPrintViewModel;
         }
 
         private void btMainHomeCute(object obj) {
