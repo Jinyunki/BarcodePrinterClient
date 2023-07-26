@@ -29,27 +29,35 @@
                 Style="{StaticResource Home_btn}"
                 Command="{Binding btMainHome}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_home_default.png"/>
+                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_home_default.png"/>
             </Button.Background>
         </Button>
-        
+
         <!--Excel Recipe-->
         <Button Grid.Row="1" Margin="12"
                 Style="{StaticResource Recipe_btn}"
                 Command="{Binding btExcel}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_excel_default.png"/>
+                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_excel_default.png"/>
+            </Button.Background>
+        </Button>
+
+        <!--Temporary Print-->
+        <Button Grid.Row="2" Margin="12"
+                Style="{StaticResource Temporary_btn}"
+                Command="{Binding btTemporary}" >
+            <Button.Background>
+                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_barcode_default.png"/>
             </Button.Background>
         </Button>
 
         <!--Web Data-->
-        <Button Grid.Row="2" Margin="12"
+        <Button Grid.Row="7" Margin="12"
                 Style="{StaticResource Graph_btn}"
                 Command="{Binding btData}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_dataList_default.png"/>
+                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_dataList_default.png"/>
             </Button.Background>
         </Button>
-
     </Grid>
 </UserControl>
