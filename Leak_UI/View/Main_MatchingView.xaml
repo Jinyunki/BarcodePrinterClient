@@ -97,7 +97,7 @@
                                      Style="{StaticResource Close_btn}" 
                                      Command="{Binding BtnPortConnectCommand}" >
                     <Button.Background>
-                        <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/closeBtn_default.png"/>
+                        <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\closeBtn_default.png"/>
                     </Button.Background>
                 </Button>
 
@@ -149,7 +149,7 @@
                          Margin="0 15 15 15" Padding="5"
                          Command="{Binding BtnPrintCommand}">
                     <Button.Background>
-                        <ImageBrush ImageSource="D:\JinYunki\Leak_UI2\Leak_UI\Assets/img_printer_white.png"/>
+                        <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_printer_white.png"/>
                     </Button.Background>
                 </Button>
             </Grid>

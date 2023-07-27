@@ -2,9 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Leak_UI.View"
-             xmlns:utiles="clr-namespace:Leak_UI.Utiles"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
              Background="Black"
              DataContext="{Binding TemporaryPrintViewModel, Source={StaticResource Locator}}"
              d:DesignHeight="600" d:DesignWidth="1200">
@@ -22,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <!--Viewing-->
-        <Grid Grid.Column="0" Background="White" ShowGridLines="True">
+        <Grid Grid.Column="0" Background="White" ShowGridLines="True" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -48,8 +47,8 @@
                            VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Text="지역/공장" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="2" Text="지역 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="2" Text="{Binding Aground}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"/>
             </Grid>
 
             <!--Second Line-->
@@ -64,11 +63,11 @@
                 <TextBlock Grid.Column="0" Text="차종" FontSize="17"
                            VerticalAlignment="Center" />
                 <TextBlock Grid.Column="1" Text="차종 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center" Foreground="red" Background="Yellow"/>
                 <TextBlock Grid.Column="2" Text="납품장소" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="3" Text="납품장소 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="3" Text="{Binding CompanyName}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"/>
             </Grid>
 
 
@@ -83,12 +82,12 @@
 
                 <TextBlock Grid.Column="0" Text="품번" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="품번 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="{Binding ModelSerials}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"  Background="Yellow"/>
                 <TextBlock Grid.Column="2" Text="수량" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="3" Text="수량 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="3" Text="{Binding Count}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red" Background="Yellow"/>
             </Grid>
 
             <!--Four Line-->
@@ -100,8 +99,8 @@
 
                 <TextBlock Grid.Column="0" Text="품명" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="품명 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="{Binding ModelName}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"  Background="Yellow"/>
             </Grid>
             
             <!--Fif Line-->
@@ -120,7 +119,7 @@
                 <TextBlock Grid.Column="2" Text="수출국" FontSize="17"
                            VerticalAlignment="Center" />
                 <TextBlock Grid.Column="3" Text="국내" FontSize="17"
-                           VerticalAlignment="Center" />
+                           VerticalAlignment="Center" Foreground="red"/>
             </Grid>
 
             <!--six Line-->
@@ -132,8 +131,12 @@
 
                 <TextBlock Grid.Column="0" Text="발행번호" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="발행번호 + 발행번호 데이터 (바코드 화 -엑셀기준Free 3 of 9)" FontSize="15"
-                           VerticalAlignment="Center" />
+
+                <TextBlock Grid.Column="1" Text="{Binding IssueBarcode}" FontSize="50"
+                           VerticalAlignment="Center" Foreground="red" 
+                           FontFamily="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Fonts\#Free 3 of 9"/>
+
+
             </Grid>
             
             <!--Sevne Line (규격에맞추기위한 건너뜀)-->
@@ -150,12 +153,12 @@
 
                 <TextBlock Grid.Column="0" Text="납품일자" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="납품일자 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Text="{Binding TodayTest}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"/>
                 <TextBlock Grid.Column="2" Text="업체명" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="3" Text="업체명 데이터" FontSize="17"
-                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="3" Text="{Binding CompanyName}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"/>
             </Grid>
             
             <!--Final Line-->
@@ -169,8 +172,9 @@
 
                 <TextBlock Grid.Column="0" Text="발행번호" FontSize="17"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="1" Text="5023G260001[50=수량,23=년도,G=월,26일=0001 Page]" FontSize="17"
-                           VerticalAlignment="Center" />
+                <!--5023G260001[50=수량,23=년도,G=월,26일=0001 Page]-->
+                <TextBlock Grid.Column="1" Text="{Binding IssueNumber}" FontSize="17"
+                           VerticalAlignment="Center" Foreground="red"/>
                 <TextBlock Grid.Column="2" Text="용기 No" FontSize="17"
                            VerticalAlignment="Center" />
             </Grid>
@@ -186,7 +190,7 @@
         </Grid>
         
         <!--Data Input-->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="15"/>
                 <ColumnDefinition Width="1.7*"/>
@@ -214,76 +218,71 @@
 
             <!--설명란-->
             <TextBlock Grid.Column="1" Grid.Row="0" Style="{StaticResource font_style}"
-                                   Text="지역" FontSize="15" 
+                                   Text="품번" FontSize="15" 
                                    VerticalAlignment="Center" />
-
+            
             <TextBlock Grid.Column="1" Grid.Row="1" Style="{StaticResource font_style}"
                                    Text="차종" FontSize="15" 
                                    VerticalAlignment="Center" />
 
             <TextBlock Grid.Column="1" Grid.Row="2" Style="{StaticResource font_style}"
-                                   Text="납품 장소" FontSize="15" 
+                                   Text="품명" FontSize="15" 
                                    VerticalAlignment="Center" />
-
             <TextBlock Grid.Column="1" Grid.Row="3" Style="{StaticResource font_style}"
-                                   Text="품번" FontSize="15" 
-                                   VerticalAlignment="Center" />
-
-            <TextBlock Grid.Column="1" Grid.Row="4" Style="{StaticResource font_style}"
                                    Text="수량" FontSize="15" 
                                    VerticalAlignment="Center" />
-
+            <TextBlock Grid.Column="1" Grid.Row="4" Style="{StaticResource font_style}"
+                                   Text="지역" FontSize="15" 
+                                   VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Grid.Row="5" Style="{StaticResource font_style}"
-                                   Text="품명" FontSize="15" 
+                                   Text="납품 장소(업체명)" FontSize="15" 
                                    VerticalAlignment="Center" />
 
             <TextBlock Grid.Column="1" Grid.Row="6" Style="{StaticResource font_style}"
                                    Text="수출국" FontSize="15" 
                                    VerticalAlignment="Center" />
             
-            <TextBlock Grid.Column="1" Grid.Row="7" Style="{StaticResource font_style}"
-                                   Text="업체명" FontSize="15" 
-                                   VerticalAlignment="Center" />
+            
 
-            <TextBlock Grid.Column="1" Grid.Row="8" Style="{StaticResource font_style}"
+            <TextBlock Grid.Column="1" Grid.Row="7" Style="{StaticResource font_style}"
                                    Text="납풀일자" FontSize="15" 
                                    VerticalAlignment="Center" />
 
-            <TextBlock Grid.Column="1" Grid.Row="9" Style="{StaticResource font_style}"
+            <TextBlock Grid.Column="1" Grid.Row="8" Style="{StaticResource font_style}"
                                    Text="프린트 수" FontSize="15" 
                                    VerticalAlignment="Center" />
 
             <!--입력란-->
             <TextBox Grid.Column="2" Grid.Row="0" FontSize="15" 
                      VerticalAlignment="Center"  
-                     Text="진천" />
+                     Text="{Binding ModelSerials}" />
+            
             <TextBox Grid.Column="2" Grid.Row="1" FontSize="15" 
                      VerticalAlignment="Center"  
                      Text="GC PE" />
-            <TextBlock Grid.Column="2" Grid.Row="2" FontSize="15" 
-                     VerticalAlignment="Center" Style="{StaticResource font_style}"
-                     Text="㈜현대모비스" />
+            <TextBox Grid.Column="2" Grid.Row="2" FontSize="15" 
+                     VerticalAlignment="Center"  
+                     Text="{Binding ModelName}" />
             <TextBox Grid.Column="2" Grid.Row="3" FontSize="15" 
                      VerticalAlignment="Center"  
-                     Text="모델 스캔 장소" />
-            <TextBox Grid.Column="2" Grid.Row="4" FontSize="15" 
-                     VerticalAlignment="Center"  
-                     Text="수량" />
-            <TextBox Grid.Column="2" Grid.Row="5" FontSize="15" 
-                     VerticalAlignment="Center"  
-                     Text="품명" />
+                     Text="{Binding Count}" />
+            <TextBlock Grid.Column="2" Grid.Row="4" FontSize="15" 
+                     VerticalAlignment="Center" Style="{StaticResource font_style}"
+                     Text="{Binding Aground}" />
+
+            <TextBlock Grid.Column="2" Grid.Row="5" FontSize="15" 
+                     VerticalAlignment="Center" Style="{StaticResource font_style}"
+                     Text="{Binding CompanyName}" />
             <TextBlock Grid.Column="2" Grid.Row="6" FontSize="15" 
                      VerticalAlignment="Center" Style="{StaticResource font_style}"
                      Text="국내" />
+            
             <TextBlock Grid.Column="2" Grid.Row="7" FontSize="15" 
-                     VerticalAlignment="Center" Style="{StaticResource font_style}"
-                     Text="㈜현대모비스" />
+                     VerticalAlignment="Center" Foreground="White"
+                     Text="{Binding TodayTest}" />
             <TextBox Grid.Column="2" Grid.Row="8" FontSize="15" 
                      VerticalAlignment="Center"  
-                     Text="Today Or 입력" />
-            <TextBox Grid.Column="2" Grid.Row="9" FontSize="15" 
-                     VerticalAlignment="Center"  
-                     Text="프린트 수" />
+                     Text="1" />
 
         </Grid>
     </Grid>

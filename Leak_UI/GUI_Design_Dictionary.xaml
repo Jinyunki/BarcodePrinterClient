@@ -203,7 +203,29 @@
                     Value="20"/>
 
                             </Style>
-    <!--// Data Grid Style-->
+
+   <!--// Barcode Text font style //-->
+   <Style x:Key="barcode_style" TargetType="TextBlock">
+
+                                <Setter Property="FontFamily"
+                    Value="Fonts/FREE3OF9.TTF #CODE39"/>
+
+                                <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+
+                                <Setter Property="HorizontalAlignment"
+                    Value="Left"/>
+
+                                <Setter Property="Foreground"
+                    Value="White"/>
+
+                                <Setter Property="FontSize"
+                    Value="20"/>
+
+    </Style>
+
+
+                            <!--// Data Grid Style-->
     <Style x:Key="DataGridStyle" TargetType="DataGrid">
                                 <!-- Make the border and grid lines a little less imposing -->
                                 <Setter Property="BorderBrush" Value="#DDDDDD" />
