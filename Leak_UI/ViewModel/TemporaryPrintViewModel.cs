@@ -1,11 +1,26 @@
 ﻿using Leak_UI.Model;
+using Leak_UI.Utiles;
+using Leak_UI.View;
 using System;
+using System.Drawing.Printing;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Printing;
+using System.Windows.Documents;
+using System.Windows.Markup;
+using System.Windows.Xps.Packaging;
+using System.IO;
+using System.Windows.Xps;
+using System.Windows;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace Leak_UI.ViewModel
 {
     public class TemporaryPrintViewModel : ViewModelProvider
     {
+        PrintDialog print ;
+        PrintDocument printDocument;
         public TemporaryPrintViewModel() {
             Console.WriteLine(DateTime.Now.Month.ToString());
             TodayTest = DateTime.Now.ToString("yyMMdd");
@@ -13,10 +28,154 @@ namespace Leak_UI.ViewModel
             // <!--5023G260001[50=수량,23=년도,G=월,26=일,0001=Page]-->
             IssueNumber = Count + DateTime.Now.ToString("yy") + MonthParse + DateTime.Now.Day.ToString() + string.Format("{0:D4}", IntNum);
             IssueBarcode = ModelSerials.Replace("-","") + "  " + IssueNumber;
+            btnPrinterPage = new Command(PrintBtn);
             
+        }
+        #region 출력전 미리보기 테스트용
+        //private void PrintPreview(object parameter) {
+        //    PrintDialog printDialog = new PrintDialog();
+        //    if (printDialog.ShowDialog() == true) {
+        //        // TempLabelView를 프린트합니다.
+        //        PrintBaseVIew tempLabelView = new PrintBaseVIew();
+        //        FixedDocument fixedDocument = PrintDocument(tempLabelView, printDialog.PrintQueue);
+
+        //        // XPS 문서 생성
+        //        XpsDocument xpsDocument = new XpsDocument("PrintBaseVIew.xps", FileAccess.ReadWrite);
+        //        XpsDocumentWriter xpsWriter = XpsDocument.CreateXpsDocumentWriter(xpsDocument);
+        //        xpsWriter.Write(fixedDocument);
+
+        //        // 미리보기 화면 생성
+        //        DocumentViewer documentViewer = new DocumentViewer();
+        //        documentViewer.Document = xpsDocument.GetFixedDocumentSequence();
+
+        //        // 미리보기 창 열기
+        //        Window previewWindow = new Window {
+        //            Content = documentViewer,
+        //            Width = 800,
+        //            Height = 600,
+        //            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+        //            Title = "Print Preview"
+        //        };
+        //        previewWindow.ShowDialog();
+
+        //        // XPS 문서 닫기
+        //        xpsDocument.Close();
+        //    }
+        //}
+
+        //private FixedDocument PrintDocument(UserControl visual, PrintQueue printQueue) {
+        //    double width = ConvertToPixels(21); // A4 용지 폭 (단위: cm)
+        //    double height = ConvertToPixels(29.7); // A4 용지 높이 (단위: cm)
+
+        //    // FixedPage 생성
+        //    FixedPage fixedPage = new FixedPage();
+        //    fixedPage.Width = width;
+        //    fixedPage.Height = height;
+
+        //    // UserControl을 FixedPage에 추가
+        //    PageContent pageContent = new PageContent();
+        //    FixedPage.SetLeft(visual, 0);
+        //    FixedPage.SetTop(visual, 0);
+        //    visual.Width = width;
+        //    visual.Height = height;
+        //    fixedPage.Children.Add(visual);
+
+        //    ((IAddChild)pageContent).AddChild(fixedPage);
+
+        //    // FixedDocument 생성
+        //    FixedDocument fixedDocument = new FixedDocument();
+        //    fixedDocument.Pages.Add(pageContent);
+
+        //    return fixedDocument;
+        //}
+        #endregion
+        #region 일단 출력되는로직
+
+        // cm를 px로 변환하는 메서드
+        private double ConvertToPixels(double cm) {
+            double dpi = 96; // WPF의 기본 DPI 값
+            return cm / 2.54 * dpi;
+        }
+        
+        private void PrintBtn(object obj) {
+
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
+            try {
+
+                print = new PrintDialog();
+                if (print.ShowDialog() == true) {
+
+                    PrintBaseVIew temporary = new PrintBaseVIew();
+                    PrintVisual(temporary, print.PrintQueue);
+                }
+            } catch (Exception e) {
+                Trace.WriteLine(TraceCatch(MethodBase.GetCurrentMethod().Name) + e);
+                throw;
+            }
+
+        }
+        private void PrintVisual(UserControl visual, PrintQueue printQueue) {
+            double width = ConvertToPixels(21); // A4 용지 폭 (단위: cm)
+            double height = ConvertToPixels(29.7); // A4 용지 높이 (단위: cm)
+
+            // FixedPage 생성
+            FixedPage fixedPage = new FixedPage();
+            fixedPage.Width = width;
+            fixedPage.Height = height;
+
+            // UserControl을 FixedPage에 추가
+            PageContent pageContent = new PageContent();
+            FixedPage.SetLeft(visual, 0);
+            FixedPage.SetTop(visual, 0);
+            visual.Width = width;
+            visual.Height = height;
+            fixedPage.Children.Add(visual);
+
+            ((IAddChild)pageContent).AddChild(fixedPage);
+
+            // FixedDocument 생성
+            FixedDocument fixedDocument = new FixedDocument();
+            fixedDocument.Pages.Add(pageContent);
+
+            // XPS 문서 작성
+            XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printQueue);
+            writer.Write(fixedDocument);
         }
 
 
+        
+        #endregion
+        /// 프린터랑 연동성공시킨코드
+        //private void PrintVisual(UserControl visual, PrintQueue printQueue) {
+        //    PrintCapabilities capabilities = printQueue.GetPrintCapabilities();
+        //    double width = capabilities.PageImageableArea.ExtentWidth;
+        //    double height = capabilities.PageImageableArea.ExtentHeight;
+
+        //    // FixedPage 생성
+        //    FixedPage fixedPage = new FixedPage();
+        //    fixedPage.Width = width;
+        //    fixedPage.Height = height;
+
+        //    // UserControl을 FixedPage에 추가
+        //    PageContent pageContent = new PageContent();
+        //    FixedPage.SetLeft(visual, 0);
+        //    FixedPage.SetTop(visual, 0);
+        //    fixedPage.Children.Add(visual);
+
+        //    ((IAddChild)pageContent).AddChild(fixedPage);
+
+        //    // FixedDocument 생성
+        //    FixedDocument fixedDocument = new FixedDocument();
+        //    fixedDocument.Pages.Add(pageContent);
+
+        //    // XPS 문서 작성
+        //    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printQueue);
+        //    writer.Write(fixedDocument);
+        //}
+
+
+
+        public ICommand btnPrinterPage { get; set; }
 
         private string _aground = "진천";
         public string Aground {
