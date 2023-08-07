@@ -155,6 +155,9 @@
     <Compile Include="View\Main_MatchingView.xaml.cs">
       <DependentUpon>Main_MatchingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MiddleLabelView.xaml.cs">
+      <DependentUpon>MiddleLabelView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PrintBaseVIew.xaml.cs">
       <DependentUpon>PrintBaseVIew.xaml</DependentUpon>
     </Compile>
@@ -166,6 +169,9 @@
     </Compile>
     <Compile Include="View\SideMenuTab.xaml.cs">
       <DependentUpon>SideMenuTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SmallLabelView.xaml.cs">
+      <DependentUpon>SmallLabelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TempLabelView.xaml.cs">
       <DependentUpon>TempLabelView.xaml</DependentUpon>
@@ -197,6 +203,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\MiddleLabelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\PrintBaseVIew.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -210,6 +220,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SideMenuTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SmallLabelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
