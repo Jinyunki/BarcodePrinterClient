@@ -14,15 +14,16 @@ using System.Windows.Xps;
 using System.Windows;
 using System.Diagnostics;
 using System.Reflection;
+using System.Windows.Media;
 
 namespace Leak_UI.ViewModel
 {
     public class TemporaryPrintViewModel : ViewModelProvider
     {
         PrintDialog print ;
-        PrintDocument printDocument;
+        //PrintDocument printDocument;
         public TemporaryPrintViewModel() {
-            Console.WriteLine(DateTime.Now.Month.ToString());
+            //Console.WriteLine(DateTime.Now.Month.ToString());
             TodayTest = DateTime.Now.ToString("yyMMdd");
             MonthReturn();
             // <!--5023G260001[50=수량,23=년도,G=월,26=일,0001=Page]-->
@@ -106,7 +107,8 @@ namespace Leak_UI.ViewModel
                 if (print.ShowDialog() == true) {
 
                     PrintBaseVIew temporary = new PrintBaseVIew();
-                    PrintVisual(temporary, print.PrintQueue);
+                    //PrintVisual(temporary, print.PrintQueue);
+                    PrintToPDF(temporary);
                 }
             } catch (Exception e) {
                 Trace.WriteLine(TraceCatch(MethodBase.GetCurrentMethod().Name) + e);
@@ -114,21 +116,72 @@ namespace Leak_UI.ViewModel
             }
 
         }
+        private void PrintToPDF(UserControl visual) {
+            Trace.WriteLine(TraceStart(MethodBase.GetCurrentMethod().Name));
+            try {
+
+                // 뷰의 크기 및 회전 설정
+                double width = ConvertToPixels(14); // A4 용지 높이 (단위: cm)
+                double height = ConvertToPixels(16); // A4 용지 폭 (단위: cm)
+
+                visual.Width = width;  // 가로와 세로를 반전하여 출력
+                visual.Height = height;
+                //visual.LayoutTransform = new RotateTransform(-90); // 시계 방향으로 90도 회전
+
+                // FixedPage 생성 및 설정
+                FixedPage fixedPage = new FixedPage();
+                fixedPage.Width = width;
+                fixedPage.Height = height;
+
+                // UserControl을 FixedPage에 추가 및 가운데 정렬
+                PageContent pageContent = new PageContent();
+                FixedPage.SetLeft(visual, (width - visual.Width) / 2);
+                FixedPage.SetTop(visual, (height - visual.Height) / 2);
+                fixedPage.Children.Add(visual);
+
+                ((IAddChild)pageContent).AddChild(fixedPage);
+
+                // FixedDocument 생성
+                FixedDocument fixedDocument = new FixedDocument();
+                fixedDocument.Pages.Add(pageContent);
+
+                // 프린터 설정
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true) {
+                    // 프린터 드라이버 선택 (예: Microsoft Print to PDF)
+                    PrintQueue printQueue = new PrintQueue(new PrintServer(), "OneNote for Windows 10");
+
+                    // XPS 문서 작성
+                    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printQueue);
+                    writer.Write(fixedDocument);
+                }
+            } catch (Exception e) {
+                Trace.WriteLine(TraceCatch(MethodBase.GetCurrentMethod().Name) + e);
+                throw;
+            }
+
+        }
+
+        /*
         private void PrintVisual(UserControl visual, PrintQueue printQueue) {
-            double width = ConvertToPixels(21); // A4 용지 폭 (단위: cm)
-            double height = ConvertToPixels(29.7); // A4 용지 높이 (단위: cm)
+            // 용지 크기 설정 (가로 방향)
+            double width = ConvertToPixels(21); // A4 용지 높이 (단위: cm)
+            double height = ConvertToPixels(29.7); // A4 용지 폭 (단위: cm)
+
+            // 뷰의 크기를 용지 크기에 맞게 조정
+            visual.Width = height;  // 가로와 세로를 반전하여 출력
+            visual.Height = width;
+            visual.LayoutTransform = new RotateTransform(-90); // 시계 방향으로 90도 회전
 
             // FixedPage 생성
             FixedPage fixedPage = new FixedPage();
             fixedPage.Width = width;
             fixedPage.Height = height;
 
-            // UserControl을 FixedPage에 추가
+            // UserControl을 FixedPage에 추가 및 가운데 정렬
             PageContent pageContent = new PageContent();
-            FixedPage.SetLeft(visual, 0);
-            FixedPage.SetTop(visual, 0);
-            visual.Width = width;
-            visual.Height = height;
+            FixedPage.SetLeft(visual, (width - visual.Width) / 2);
+            FixedPage.SetTop(visual, (height - visual.Height) / 2);
             fixedPage.Children.Add(visual);
 
             ((IAddChild)pageContent).AddChild(fixedPage);
@@ -137,43 +190,20 @@ namespace Leak_UI.ViewModel
             FixedDocument fixedDocument = new FixedDocument();
             fixedDocument.Pages.Add(pageContent);
 
-            // XPS 문서 작성
-            XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printQueue);
-            writer.Write(fixedDocument);
+            // 프린터 설정
+            PrintDialog printDialog = new PrintDialog();
+            if (printDialog.ShowDialog() == true) {
+                PrintTicket printTicket = printDialog.PrintTicket;
+                printTicket.PageMediaSize = new PageMediaSize(width, height);
+
+                // XPS 문서 작성
+                XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printQueue);
+                writer.Write(fixedDocument);
+            }
         }
-
-
-        
+        */
         #endregion
-        /// 프린터랑 연동성공시킨코드
-        //private void PrintVisual(UserControl visual, PrintQueue printQueue) {
-        //    PrintCapabilities capabilities = printQueue.GetPrintCapabilities();
-        //    double width = capabilities.PageImageableArea.ExtentWidth;
-        //    double height = capabilities.PageImageableArea.ExtentHeight;
-
-        //    // FixedPage 생성
-        //    FixedPage fixedPage = new FixedPage();
-        //    fixedPage.Width = width;
-        //    fixedPage.Height = height;
-
-        //    // UserControl을 FixedPage에 추가
-        //    PageContent pageContent = new PageContent();
-        //    FixedPage.SetLeft(visual, 0);
-        //    FixedPage.SetTop(visual, 0);
-        //    fixedPage.Children.Add(visual);
-
-        //    ((IAddChild)pageContent).AddChild(fixedPage);
-
-        //    // FixedDocument 생성
-        //    FixedDocument fixedDocument = new FixedDocument();
-        //    fixedDocument.Pages.Add(pageContent);
-
-        //    // XPS 문서 작성
-        //    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printQueue);
-        //    writer.Write(fixedDocument);
-        //}
-
-
+        
 
         public ICommand btnPrinterPage { get; set; }
 
@@ -186,7 +216,7 @@ namespace Leak_UI.ViewModel
             }
         }
 
-        private string _companyName = "㈜현대모비스";
+        private string _companyName = "R7A8 ㈜현대모비스";
         public string CompanyName {
             get { return _companyName; }
             set {

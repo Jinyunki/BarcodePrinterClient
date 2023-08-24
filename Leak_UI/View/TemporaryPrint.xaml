@@ -23,18 +23,9 @@
 
         <!--Viewing-->
         <Grid Grid.Column="0" Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <view:TempLabelView Grid.Column="0" Grid.Row="0"/>
-            <view:TempLabelView Grid.Column="0" Grid.Row="1"/>
-            <view:TempLabelView Grid.Column="1" Grid.Row="0"/>
-            <view:TempLabelView Grid.Column="1" Grid.Row="1"/>
+            <Viewbox>
+                <view:PrintBaseVIew Grid.Column="0" Grid.Row="0"/>
+            </Viewbox>
         </Grid>
         <!--Data Input-->
         <Grid Grid.Column="1" Margin="10">

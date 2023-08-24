@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Leak_UI.View"
              mc:Ignorable="d" 
              DataContext="{Binding TemporaryPrintViewModel, Source={StaticResource Locator}}"
-             Height="8.1cm" Width="14cm">
+             Height="8cm" Width="14cm">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,7 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="White" ShowGridLines="True" Margin="0.15cm 0.2cm 0.15cm 0.2cm">
+    <Grid Background="White" ShowGridLines="True" Margin="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="44*"/>
             <RowDefinition Height="33*"/>
@@ -41,10 +41,10 @@
                 <TextBlock Grid.Column="0" Text="부품식별표(생산지시서)" Foreground="Red"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                <TextBlock Grid.Column="1" Text="지역" 
+                <TextBlock Grid.Column="1" Text="지역" Foreground="Red"
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-                <TextBlock Grid.Column="2" Text="내수" Foreground="Red"
+                <TextBlock Grid.Column="2" Text="내수" 
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
 
@@ -93,13 +93,13 @@
                 <TextBlock Grid.Column="0" Text="품번" Foreground="Red"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                <TextBlock Grid.Column="1"  Text="품번 Data" 
+                <TextBlock Grid.Column="1"  Text="{Binding ModelSerials}" 
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
 
                 <TextBlock Grid.Column="2" Text="수 량" Foreground="Red"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                <TextBlock Grid.Column="3"  Text="수량 Data" 
+                <TextBlock Grid.Column="3"  Text="{Binding Count}" 
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
 
             </Grid>
@@ -115,7 +115,7 @@
                 <TextBlock Grid.Column="0" Text="품 명" Foreground="Red"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-                <TextBlock Grid.Column="1"  Text="품명 Data" 
+                <TextBlock Grid.Column="1"  Text="{Binding ModelName}" 
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
 
             </Grid>
@@ -127,7 +127,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="UNIT ASSY-RR VIEW CAMERA ( 품명 데이터 )"
+                <TextBlock Grid.Row="0" Text="{Binding ModelName}"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 
                 <TextBlock Grid.Row="1" Text="R7A8,99240J7050  00016,N6N,1003 (CODE 39 바코드화)"
@@ -161,7 +161,7 @@
                 <TextBlock Grid.Column="2" Text="업체명" Foreground="Red"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
-                <TextBlock Grid.Column="3" Text="업체명Data" 
+                <TextBlock Grid.Column="3" Text="{Binding CompanyName}" 
                        HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
 
@@ -198,7 +198,7 @@
                 <TextBlock Grid.Column="1" Text="" 
                            VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-                <TextBlock Grid.Column="2" Text="발행날짜." Foreground="Red"
+                <TextBlock Grid.Column="2" Text="{Binding TodayTest}" 
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
             </Grid>

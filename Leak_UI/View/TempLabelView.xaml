@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Leak_UI.View"
              mc:Ignorable="d" 
              DataContext="{Binding TemporaryPrintViewModel, Source={StaticResource Locator}}"
-             d:DesignHeight="800" d:DesignWidth="1400">
+             Height="8cm" Width="14cm">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,7 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="White" ShowGridLines="True" Margin="3">
+    <Grid Background="White" ShowGridLines="True" Margin="1">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
@@ -36,11 +36,11 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="부품식별표(생산지시서)" FontSize="17"
+            <TextBlock Grid.Column="0" Text="부품식별표(생산지시서)"
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="지역/공장" FontSize="17"
+            <TextBlock Grid.Column="1" Text="지역/공장" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Text="{Binding Aground}" FontSize="17"
+            <TextBlock Grid.Column="2" Text="{Binding Aground}" 
                            VerticalAlignment="Center" />
         </Grid>
 
@@ -53,13 +53,13 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="차종" FontSize="17"
+            <TextBlock Grid.Column="0" Text="차종" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="차종 데이터" FontSize="17"
+            <TextBlock Grid.Column="1" Text="차종 데이터" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Text="납품장소" FontSize="17"
+            <TextBlock Grid.Column="2" Text="납품장소" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="3" Text="{Binding CompanyName}" FontSize="17"
+            <TextBlock Grid.Column="3" Text="{Binding CompanyName}" 
                            VerticalAlignment="Center" />
         </Grid>
 
@@ -73,13 +73,13 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="품번" FontSize="17"
+            <TextBlock Grid.Column="0" Text="품번" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="{Binding ModelSerials}" FontSize="17"
+            <TextBlock Grid.Column="1" Text="{Binding ModelSerials}" 
                            VerticalAlignment="Center"  />
-            <TextBlock Grid.Column="2" Text="수량" FontSize="17"
+            <TextBlock Grid.Column="2" Text="수량" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="3" Text="{Binding Count}" FontSize="17"
+            <TextBlock Grid.Column="3" Text="{Binding Count}" 
                            VerticalAlignment="Center" />
         </Grid>
 
@@ -90,9 +90,9 @@
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="품명" FontSize="17"
+            <TextBlock Grid.Column="0" Text="품명" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="{Binding ModelName}" FontSize="17"
+            <TextBlock Grid.Column="1" Text="{Binding ModelName}" 
                            VerticalAlignment="Center"  />
         </Grid>
 
@@ -105,13 +105,13 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="수출" FontSize="17"
+            <TextBlock Grid.Column="0" Text="수출" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="O" FontSize="17"
+            <TextBlock Grid.Column="1" Text="O" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Text="수출국" FontSize="17"
+            <TextBlock Grid.Column="2" Text="수출국" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="3" Text="국내" FontSize="17"
+            <TextBlock Grid.Column="3" Text="국내" 
                            VerticalAlignment="Center" />
         </Grid>
 
@@ -122,10 +122,10 @@
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="발행번호" FontSize="17"
+            <TextBlock Grid.Column="0" Text="발행번호" 
                            VerticalAlignment="Center" />
 
-            <TextBlock Grid.Column="1" Text="{Binding IssueBarcode}" FontSize="50"
+            <TextBlock Grid.Column="1" Text="{Binding IssueBarcode}" FontSize="30"
                            VerticalAlignment="Center"  
                            FontFamily="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Fonts\#Free 3 of 9"/>
 
@@ -144,13 +144,13 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="납품일자" FontSize="17"
+            <TextBlock Grid.Column="0" Text="납품일자" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Text="{Binding TodayTest}" FontSize="17"
+            <TextBlock Grid.Column="1" Text="{Binding TodayTest}" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Text="업체명" FontSize="17"
+            <TextBlock Grid.Column="2" Text="업체명" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="3" Text="{Binding CompanyName}" FontSize="17"
+            <TextBlock Grid.Column="3" Text="{Binding CompanyName}" 
                            VerticalAlignment="Center" />
         </Grid>
 
@@ -163,22 +163,25 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="발행번호" FontSize="17"
+            <TextBlock Grid.Column="0" Text="발행번호" 
                            VerticalAlignment="Center" />
             <!--5023G260001[50=수량,23=년도,G=월,26일=0001 Page]-->
-            <TextBlock Grid.Column="1" Text="{Binding IssueNumber}" FontSize="17"
+            <TextBlock Grid.Column="1" Text="{Binding IssueNumber}" 
                            VerticalAlignment="Center" />
-            <TextBlock Grid.Column="2" Text="용기 No" FontSize="17"
+            <TextBlock Grid.Column="2" Text="용기 No" 
                            VerticalAlignment="Center" />
         </Grid>
 
         <Border HorizontalAlignment="Right"
                     VerticalAlignment="Bottom" 
                     Grid.RowSpan="3" Grid.Row="6"
-                    CornerRadius="150" Width="150" Height="150"
+                    CornerRadius="150" Width="2cm" Height="2cm"
                     BorderThickness="3" BorderBrush="Black"  Margin="10 0 0 0">
-            <TextBlock Text="중금속&#10;&#10;확인필" Foreground="Black" FontSize="25"
+            <Viewbox>
+                <TextBlock Text="중금속&#10;확인필" Foreground="Black" 
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            </Viewbox>
         </Border>
     </Grid>
 

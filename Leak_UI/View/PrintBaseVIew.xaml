@@ -4,36 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Leak_UI.View"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Background="Black"
              xmlns:view="clr-namespace:Leak_UI.View"
              DataContext="{Binding TemporaryPrintViewModel, Source={StaticResource Locator}}"
-             d:DesignHeight="210" d:DesignWidth="297">
-    <UserControl.LayoutTransform>
-        <RotateTransform Angle="270" />
-    </UserControl.LayoutTransform>
-    <Viewbox>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Viewbox Grid.Column="0" Grid.Row="0">
-                <view:TempLabelView/>
-            </Viewbox>
-            <Viewbox Grid.Column="1" Grid.Row="0">
-                <view:TempLabelView/>
-            </Viewbox>
-            <Viewbox Grid.Column="0" Grid.Row="1">
-                <view:TempLabelView/>
-            </Viewbox>
-            <Viewbox Grid.Column="1" Grid.Row="1">
-                <view:TempLabelView/>
-            </Viewbox>
+             Height="16cm" Width="14cm">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0">
+            <view:MiddleLabelView/>
         </Grid>
-    </Viewbox>
-    
+      
+        <Grid Grid.Column="1" Grid.Row="1">
+            <view:MiddleLabelView/>
+        </Grid>
+    </Grid>
 </UserControl>
