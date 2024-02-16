@@ -20,7 +20,7 @@ namespace Leak_UI.Model
         /// <summary>
         /// 23 07 21 해당 경로를 직접 정하고 변경할수있게 수정하면 어떨까? 업데이트예정
         /// </summary>
-        public static string PATH = Path.Combine(@"D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\RecipeData", "LabelConfig.xlsx");
+        public static string PATH = Path.Combine(@"D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\bin\RecipeData", "LabelConfig.xlsx");
 
         public void From_WebItem_To_Model() {
             LabelType = webDriveManager.LabelType;
@@ -33,6 +33,72 @@ namespace Leak_UI.Model
             WebDataList = webDriveManager.WebDataList;
         }
 
+        #region 소모품 구매 Data보관 23.08.25
+        public string _useCash = "";
+        public string UseCash
+        {
+            get { return _useCash; }
+            set
+            {
+                _useCash = value;
+                RaisePropertyChanged(nameof(UseCash));
+            }
+        }
+        public double _cashPercentage = 0;
+        public double UseCashDouble
+        {
+            get { return _cashPercentage; }
+            set
+            {
+                _cashPercentage = value;
+                RaisePropertyChanged(nameof(UseCashDouble));
+            }
+        }
+        public string _limitedCash = "";
+        public string LimitedCash
+        {
+            get { return _limitedCash; }
+            set
+            {
+                _limitedCash = value;
+                RaisePropertyChanged(nameof(LimitedCash));
+            }
+        }
+        
+        public double _limitedCashDouble = 100;
+        public double LimitedCashDouble
+        {
+            get { return _limitedCashDouble; }
+            set
+            {
+                _limitedCashDouble = value;
+                RaisePropertyChanged(nameof(LimitedCashDouble));
+            }
+        }
+        
+        public string _remainderCash = "";
+        public string RemainderCash
+        {
+            get { return _remainderCash; }
+            set
+            {
+                _remainderCash = value;
+                RaisePropertyChanged(nameof(RemainderCash));
+            }
+        }
+
+        public string _remainderCashPercent = "";
+        public string RemainderCashPercent
+        {
+            get { return _remainderCashPercent; }
+            set
+            {
+                _remainderCashPercent = value;
+                RaisePropertyChanged(nameof(RemainderCashPercent));
+            }
+        }
+
+        #endregion
         private ObservableCollection<List<object>> _webDataList;
         public ObservableCollection<List<object>> WebDataList {
             get { return _webDataList; }
@@ -276,10 +342,10 @@ namespace Leak_UI.Model
 
         #endregion
 
-        public string TraceStart(string methodName) {
+        public static string TraceStart(string methodName) {
             return "==========   Start   ==========\nMethodName : " + methodName + "\n";
         }
-        public string TraceCatch(string methodName) {
+        public static string TraceCatch(string methodName) {
             return "========== Exception ==========\nMethodName : " + methodName + "\nException : ";
         }
     }

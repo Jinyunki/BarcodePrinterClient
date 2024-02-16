@@ -68,6 +68,9 @@
     <Reference Include="CommonServiceLocator, Version=2.0.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.7\lib\net46\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="De.TorstenMandelkow.MetroChart, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d5b8d1bbc99c4a2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\ModernUICharts.WPF.1.0.0\lib\net45\De.TorstenMandelkow.MetroChart.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=6.2.8.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.6.2.8\lib\net35\EPPlus.dll</HintPath>
     </Reference>
@@ -147,11 +150,15 @@
     </ApplicationDefinition>
     <Compile Include="Model\MainModel.cs" />
     <Compile Include="Model\ViewModelProvider.cs" />
+    <Compile Include="Utiles\CircularProgressBar.cs" />
     <Compile Include="Utiles\Command.cs" />
+    <Compile Include="Utiles\DoubleToPercentageStringConverter.cs" />
     <Compile Include="Utiles\ExcelReadManager.cs" />
+    <Compile Include="Utiles\FileSearchManager.cs" />
     <Compile Include="Utiles\IDispatcher.cs" />
     <Compile Include="Utiles\MatchingManager.cs" />
     <Compile Include="Utiles\SerialPortManager.cs" />
+    <Compile Include="Utiles\StringToBrushConverter.cs" />
     <Compile Include="Utiles\WebDriveManager.cs" />
     <Compile Include="Utiles\ZPLCommand.cs" />
     <Compile Include="ViewModel\Main_MatchingViewModel.cs" />
@@ -191,6 +198,10 @@
     <Compile Include="View\TemporaryPrint.xaml.cs">
       <DependentUpon>TemporaryPrint.xaml</DependentUpon>
     </Compile>
+    <Page Include="Design_Dictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI_Design_Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -336,12 +347,13 @@
     <Resource Include="Assets\img_dataList_default.png" />
     <Resource Include="Assets\img_dataList_event.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RecipeData\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Assets\img_barcode_default.png" />
     <Resource Include="Assets\img_barcode_event.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\img_file_open_default.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

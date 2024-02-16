@@ -13,8 +13,8 @@ namespace Leak_UI.ViewModel
     public class ExcelRecipe_ViewModel : ViewModelProvider
     {
         public ExcelRecipe_ViewModel() {
-            _excelReadManager.LoadExcelData(PATH);
-            ExcelData = _excelReadManager.ExcelDataProperty;
+            ExcelReadManager.LoadExcelData(PATH);
+            ExcelData = ExcelReadManager.ExcelDataProperty;
         }
 
         ExcelReadManager _excelReadManager = new ExcelReadManager();

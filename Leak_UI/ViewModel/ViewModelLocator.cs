@@ -45,6 +45,7 @@ namespace Leak_UI.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
+        
         public Main_MatchingViewModel Main_MatchingViewModel {
             get {
                 return ServiceLocator.Current.GetInstance<Main_MatchingViewModel>();

@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+                    xmlns:utiles="clr-namespace:Leak_UI.Utiles">
     <!--Main Window Style-->
     <Style x:Key="RoundedWindowStyle" TargetType="Window">
         <Setter Property="Template">
@@ -18,8 +20,10 @@
         </Setter>
     </Style>
 
+
+
     <!--/Button_Icon/ Excel Recipe Button Style Template //-->
-    <ImageBrush x:Key="Recipe_btn_MouseOver" ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_excel_event.png"/>
+    <ImageBrush x:Key="Recipe_btn_MouseOver" ImageSource="Assets\img_excel_event.png"/>
     <Style x:Key="Recipe_btn" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
@@ -43,7 +47,7 @@
     </Style>
 
     <!--/Button_Icon/ Temporary Button Style Template //-->
-    <ImageBrush x:Key="Temporary_btn_MouseOver" ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_barcode_event.png"/>
+    <ImageBrush x:Key="Temporary_btn_MouseOver" ImageSource="Assets\img_barcode_event.png"/>
     <Style x:Key="Temporary_btn" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
@@ -67,7 +71,7 @@
     </Style>
 
     <!--/Button_Icon/ DataList Button Style Template //-->
-    <ImageBrush x:Key="Graph_btn_MouseOver" ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_dataList_event.png"/>
+    <ImageBrush x:Key="Graph_btn_MouseOver" ImageSource="Assets\img_dataList_event.png"/>
     <Style x:Key="Graph_btn" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
@@ -91,7 +95,7 @@
     </Style>
 
     <!--/Button_Icon/ Home Button Style Template //-->
-    <ImageBrush x:Key="Home_btn_MouseOver" ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_home_event.png"/>
+    <ImageBrush x:Key="Home_btn_MouseOver" ImageSource="Assets\img_home_event.png"/>
     <Style x:Key="Home_btn" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
@@ -115,7 +119,7 @@
     </Style>
 
     <!--/Button_Icon/ Port On/Off Button Style Template //-->
-    <ImageBrush x:Key="CloseBtn_MouseOver" ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\closeBtn_MouseOver.png"/>
+    <ImageBrush x:Key="CloseBtn_MouseOver" ImageSource="Assets\closeBtn_MouseOver.png"/>
     <Style x:Key="Close_btn" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
@@ -139,31 +143,55 @@
     </Style>
 
     <!--/Button_Icon/ Printer Icon Button Style Template //-->
-    <ImageBrush x:Key="Btn_Print_MouseOver" ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_printer_green.png"/>
+    <ImageBrush x:Key="Btn_Print_MouseOver" ImageSource="Assets\img_printer_green.png"/>
     <Style x:Key="Print_btn" TargetType="{x:Type Button}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="button"
-                                BorderThickness="0"
-                                Background="{TemplateBinding Background}"
-                                SnapsToDevicePixels="True">
+                            BorderThickness="0"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
-                                     Value="True">
+                                 Value="True">
                             <Setter Property="Background"
-                                        TargetName="button"
-                                        Value="{StaticResource Btn_Print_MouseOver}"/>
+                                    TargetName="button"
+                                    Value="{StaticResource Btn_Print_MouseOver}"/>
                             <!---->
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    
-    
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--/Button_Icon/ Statistics_btn Icon Button Style Template //-->
+    <ImageBrush x:Key="Btn_Statistics_MouseOver" ImageSource="Assets\img_graph_event.png"/>
+    <Style x:Key="Statistics_btn" TargetType="{x:Type Button}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="button"
+                            BorderThickness="0"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    TargetName="button"
+                                    Value="{StaticResource Btn_Statistics_MouseOver}"/>
+                            <!---->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
     <!--// Window btn style //-->
     <Style TargetType="Button" x:Key="CommonButtonStyle">
                                 <Setter Property="FontFamily" Value="Montserret"/>
@@ -361,4 +389,7 @@
                                 </Setter>
                             </Style>
     
+    
+    
+
 </ResourceDictionary>

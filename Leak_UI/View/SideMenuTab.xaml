@@ -9,7 +9,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\GUI_Design_Dictionary.xaml" />
+                <ResourceDictionary Source="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\GUI_Design_Dictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -29,7 +29,7 @@
                 Style="{StaticResource Home_btn}"
                 Command="{Binding btMainHome}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_home_default.png"/>
+                <ImageBrush ImageSource="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_home_default.png"/>
             </Button.Background>
         </Button>
 
@@ -38,16 +38,26 @@
                 Style="{StaticResource Recipe_btn}"
                 Command="{Binding btExcel}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_excel_default.png"/>
+                <ImageBrush ImageSource="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_excel_default.png"/>
             </Button.Background>
         </Button>
 
         <!--Temporary Print-->
         <Button Grid.Row="2" Margin="12"
-                Style="{StaticResource Temporary_btn}"
-                Command="{Binding btTemporary}" >
+        Style="{StaticResource Temporary_btn}"
+        Command="{Binding btTemporary}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_barcode_default.png"/>
+                <ImageBrush ImageSource="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_barcode_default.png"/>
+            </Button.Background>
+        </Button>
+
+        <!--23.08.24 해당 버튼 누를시, 구매 소모품 데이터 통계를 내어서 해당 데이터를 View로 이쁘게 꾸며볼것-->
+        <!--Statistics Print-->
+        <Button Grid.Row="3" Margin="12"
+        Style="{StaticResource Statistics_btn}"
+        Command="{Binding btStatistics}" >
+            <Button.Background>
+                <ImageBrush ImageSource="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_graph_default.png"/>
             </Button.Background>
         </Button>
 
@@ -56,7 +66,7 @@
                 Style="{StaticResource Graph_btn}"
                 Command="{Binding btData}" >
             <Button.Background>
-                <ImageBrush ImageSource="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_dataList_default.png"/>
+                <ImageBrush ImageSource="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Assets\img_dataList_default.png"/>
             </Button.Background>
         </Button>
     </Grid>

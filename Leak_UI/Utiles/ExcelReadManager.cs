@@ -8,7 +8,7 @@ namespace Leak_UI.Utiles
 {
     public class ExcelReadManager
     {
-        public ObservableCollection<List<object>> ExcelDataProperty { get; set; }
+        public static ObservableCollection<List<object>> ExcelDataProperty { get; set; }
         /// <summary>
         /// path = 엑셀레시피의 경로를 파라메터에 입력하시면 됩니다.
         /// excelDataProperty = 타입과 동일한 변수를 생성하여 입력하시오.
@@ -16,7 +16,7 @@ namespace Leak_UI.Utiles
         /// <param name="path"></param>
         /// <param name="excelDataProperty"></param>
         /// <returns></returns>
-        public ObservableCollection<List<object>> LoadExcelData(string path) {
+        public static ObservableCollection<List<object>> LoadExcelData(string path) {
             try {
                 using (ExcelPackage package = new ExcelPackage(new FileInfo(path))) {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];

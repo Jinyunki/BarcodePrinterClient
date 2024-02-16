@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using Leak_UI.ViewModel;
 using System.Windows;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ namespace Leak_UI.Model
         public ICommand btExcel { get; set; }
         public ICommand btData { get; set; }
         public ICommand btTemporary { get; set; }
+        public ICommand btStatistics { get; set; }
 
         #region CurrentViewChanger
 
@@ -19,6 +21,7 @@ namespace Leak_UI.Model
         private ViewModelBase _currentViewModel;
         public ViewModelBase CurrentViewModel {
             get {
+                //Messenger.Default.Send(new SignalMessage(IsViewName, IsPress));
                 return _currentViewModel;
             }
             set {

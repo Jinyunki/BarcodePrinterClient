@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\GUI_Design_Dictionary.xaml" />
+                <ResourceDictionary Source="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\GUI_Design_Dictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -127,7 +127,7 @@
 
             <TextBlock Grid.Column="1" Text="{Binding IssueBarcode}" FontSize="30"
                            VerticalAlignment="Center"  
-                           FontFamily="D:\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Fonts\#Free 3 of 9"/>
+                           FontFamily="D:\0.DefaultFile\JinYunki\BoxLabe(23.07.20)\Leak_UI\Leak_UI\Fonts\#Free 3 of 9"/>
 
 
         </Grid>
